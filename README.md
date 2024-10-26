@@ -22,6 +22,18 @@ iProViS: Intelligent Product Vision System
 <h2>Commercial Side Features</h2>
 <h3>Stock and Price Tracking</h3>
 <p>Store owners will be able to track the stock status and price information of other stores in the marketplaces.</p>
+<br>
+
+<h1>Challenging Problems and Issues</h1>
+<ul> <li><strong>Product Image Detection:</strong> Insufficient ambient light may hinder the detection of product images.</li>
+<li><strong>Internet Dependency:</strong> Devices without an internet connection may struggle to access the iProVis server.</li> </ul>
+<h2>Related Computer Science Fields and Subfields</h2>
+<ul> <li>Computer Vision</li> <li>Software Development</li> </ul> 
+ <h2>References to Existing Solutions</h2>
+ <ol> <li>Li, Q., Peng, X., Cao, L., Du, W., Xing, H., Qiao, Y., & Peng, Q. (2020). Product image recognition with guidance learning and noisy supervision. <em>Computer Vision and Image Understanding</em>, 196, 102963.</li> <li>Bai, Y., Chen, Y., Yu, W., Wang, L., & Zhang, W. (2020). Products-10k: A large-scale product recognition dataset. <em>arXiv preprint arXiv:2008.10545</em>.</li> <li>Chen, S., Liu, D., Pu, Y., & Zhong, Y. (2022). Advances in deep learning-based image recognition of product packaging. <em>Image and Vision Computing</em>, 128, 104571.</li> </ol>
+<h2>Tools</h2>
+<ul> <li><strong>Programming Languages:</strong> <ul> <li>Python</li> <li>Dart</li> </ul> </li> <li><strong>Frameworks:</strong> <ul> <li>Flutter</li> </ul>  <ul> <li>Yolo v8.0 </li> </ul> </li> <li><strong>Libraries:</strong> <ul> <li>Various Python libraries (Numpy, Opencv) for Computer Vision (e.g., TensorFlow Lite).</li> <li>Dart libraries for Computer Vision (e.g., TensorFlow Lite, Flutter Vision).</li> </ul> </li> </ul> 
+
 
 <br>
 <table border="1">
