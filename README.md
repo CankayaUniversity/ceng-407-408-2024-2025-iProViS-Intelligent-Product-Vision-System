@@ -6,7 +6,7 @@ iProViS: Intelligent Product Vision System
 
 <p> Additionally, a new framework has been proposed for recyclable product packaging. The recognized product is integrated into the intelligent recycling process by determining its type through the API of the iPRoVis system and incorporating information such as weight when empty or full. This feature enables users to save time by having their discarded packaging recognized and sorted by smart recycling machines during the recycling process. The developed system not only enhances consumer experience but also contributes significantly to sustainability and environmentally friendly approaches within green IT strategy. </p> </br>
 
-<h2>Features</h2>
+<h2>End-User Features</h2>
 <p>Recognizing products in retail sectors such as supermarkets, clothing, food, electronics, and others using computer</p>
 
 
@@ -18,6 +18,12 @@ iProViS: Intelligent Product Vision System
    
 <h3>Providing product content information with multilingual support.</h3>
 <h3>Contributing significantly to sustainability and environmentally friendly approaches within the realm of green IT.</h3>
+
+<h2>Commercial Side Features</h2>
+<h3>Stock and Price Tracking</h3>
+<p>Store owners will be able to track the stock status and price information of other stores in the marketplaces.</p>
+
+<br>
 <table border="1">
   <thead>
     <tr>
