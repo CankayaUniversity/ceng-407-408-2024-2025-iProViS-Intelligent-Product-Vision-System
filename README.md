@@ -34,6 +34,31 @@ iProViS: Intelligent Product Vision System
 <h2>Tools</h2>
 <ul> <li><strong>Programming Languages:</strong> <ul> <li>Python</li> <li>Dart</li> </ul> </li> <li><strong>Frameworks:</strong> <ul> <li>Flutter</li> </ul>  <ul> <li>Yolo v8.0 </li> </ul> </li> <li><strong>Libraries:</strong> <ul> <li>Various Python libraries (Numpy, Opencv) for Computer Vision (e.g., TensorFlow Lite).</li> <li>Dart libraries for Computer Vision (e.g., TensorFlow Lite, Flutter Vision).</li> </ul> </li> </ul> 
 
+<br>
+<h3>  Potential problems and alternative solutions   </h3>
+    <p>The product image may not be detected due to insufficient ambient light.
+
+Alternative Solution: In case of any negative scenario that may occur in product recognition with the iProVis system, it will be ensured that it works in harmony with QR code or barcode components. The multilingual feature will also be integrated for these components.
+
+The problem of not being able to access the iProVis server on a device without an internet connection.
+
+Alternative Solution: In case of no internet connect</p>
+<br>
+<table border="1">
+    <thead>
+        <tr>
+            <th>Advisor </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Gül Tokdemir</td>
+        </tr>
+        <tr>
+            <td>Sezer Uğuz</td>
+        </tr>
+    </tbody>
+</table>
 
 <br>
 <table border="1">
