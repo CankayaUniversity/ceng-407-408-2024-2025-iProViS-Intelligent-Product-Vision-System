@@ -8,7 +8,7 @@ plugins {
 android {
     namespace = "com.example.iprovis"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = 28.0.13004108
+    ndkVersion = "29.0.13113456"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
