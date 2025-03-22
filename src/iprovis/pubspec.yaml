@@ -14,6 +14,8 @@ dependencies:
   http: ^1.3.0
   provider: ^6.1.2
   shared_preferences: ^2.5.2
+  tflite_flutter: ^0.9.5
+  tflite_flutter_helper: ^0.2.1
 
 dev_dependencies:
   flutter_test:
@@ -22,3 +24,9 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  assets:
+    - assets/
+    - assets/labels.txt
+    - assets/model.tflite
+    - assets/images
