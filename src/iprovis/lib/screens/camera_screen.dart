@@ -26,13 +26,16 @@ class _CameraPageState extends State<CameraPage> {
     final firstCamera = cameras.first;
 
     // Initialize the camera controller
-    _cameraController = CameraController(firstCamera, ResolutionPreset.medium);
+    _cameraController = CameraController(
+      firstCamera,
+      ResolutionPreset.medium,
+    );
 
     // Initialize the controller future
     _initializeControllerFuture = _cameraController.initialize();
 
     // Check if the camera is ready
-    initializeControllerFuture.then(() {
+    _initializeControllerFuture.then((_) {
       if (!mounted) return;
       setState(() {
         _isCameraReady = true;
@@ -70,15 +73,14 @@ class _CameraPageState extends State<CameraPage> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder:
-                (context) => ProductPage(
-                  productName: 'Scanned Product',
-                  productImage: imagePath,
-                  prices: [
-                    {'store': 'Store A', 'price': '\$10.00'},
-                    {'store': 'Store B', 'price': '\$12.00'},
-                  ],
-                ),
+            builder: (context) => ProductPage(
+              productName: 'Scanned Product',
+              productImage: imagePath,
+              prices: [
+                {'store': 'Store A', 'price': '\$10.00'},
+                {'store': 'Store B', 'price': '\$12.00'},
+              ],
+            ),
           ),
         );
       }
@@ -91,7 +93,9 @@ class _CameraPageState extends State<CameraPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Scan Product')),
+      appBar: AppBar(
+        title: Text('Scan Product'),
+      ),
       body: FutureBuilder<void>(
         future: _initializeControllerFuture,
         builder: (context, snapshot) {
