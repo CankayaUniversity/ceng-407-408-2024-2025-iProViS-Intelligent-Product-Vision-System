@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../services/auth_service.dart';
+import 'package:iprovis/services/auth_service.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -18,9 +18,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Giriş Yap'),
-      ),
+      appBar: AppBar(title: const Text('Giriş Yap')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -62,9 +60,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 width: double.infinity,
                 child: FilledButton(
                   onPressed: _isLoading ? null : _handleLogin,
-                  child: _isLoading
-                      ? const CircularProgressIndicator(color: Colors.white)
-                      : const Text('Giriş Yap'),
+                  child:
+                      _isLoading
+                          ? const CircularProgressIndicator(color: Colors.white)
+                          : const Text('Giriş Yap'),
                 ),
               ),
               const SizedBox(height: 16),
@@ -94,9 +93,9 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       } catch (e) {
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Hata: ${e.toString()}')),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text('Hata: ${e.toString()}')));
         }
       } finally {
         setState(() => _isLoading = false);
@@ -110,4 +109,4 @@ class _LoginScreenState extends State<LoginScreen> {
     _passwordController.dispose();
     super.dispose();
   }
-} 
+}
