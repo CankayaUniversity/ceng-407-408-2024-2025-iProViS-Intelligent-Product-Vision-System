@@ -27,4 +27,4 @@ flutter:
   assets:
     - assets/labels.txt
     - assets/iprovis_model.tflite
-    - assets/
+    - assets/images/

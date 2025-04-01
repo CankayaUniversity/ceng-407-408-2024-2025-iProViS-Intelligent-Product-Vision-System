@@ -13,7 +13,8 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin {
+class _HomeScreenState extends State<HomeScreen>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
 
@@ -24,9 +25,10 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
       duration: const Duration(milliseconds: 150),
       vsync: this,
     );
-    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.95).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-    );
+    _scaleAnimation = Tween<double>(
+      begin: 1.0,
+      end: 0.95,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
   }
 
   @override
@@ -50,10 +52,11 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ProductInfoScreen(
-                imageFile: File(image.path),
-                isFromGallery: true,
-              ),
+              builder:
+                  (context) => ProductInfoScreen(
+                    imageFile: File(image.path),
+                    isFromGallery: true,
+                  ),
             ),
           );
         }
@@ -145,9 +148,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => LoginRegisterPage(),
-                ),
+                MaterialPageRoute(builder: (context) => LoginRegisterPage()),
               );
             },
           ),
@@ -172,7 +173,9 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                   children: [
                     Text(
                       'Ürün Taramasına Başlayın',
-                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      style: Theme.of(
+                        context,
+                      ).textTheme.headlineSmall?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
@@ -180,9 +183,9 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                     const SizedBox(height: 16),
                     Text(
                       'Ürünün fotoğrafını çekerek fiyat karşılaştırması ve içerik bilgilerini görüntüleyin',
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: Colors.grey[400],
-                      ),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.bodyLarge?.copyWith(color: Colors.grey[400]),
                       textAlign: TextAlign.center,
                     ),
                   ],
@@ -194,9 +197,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) => const CameraScreen(),
-                    ),
+                    MaterialPageRoute(builder: (context) => CameraPage()),
                   );
                 },
                 icon: Icons.camera_alt,
@@ -228,10 +229,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                     Expanded(
                       child: Text(
                         'Hesap oluşturarak tarama geçmişinizi kaydedebilirsiniz',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey[400],
-                        ),
+                        style: TextStyle(fontSize: 14, color: Colors.grey[400]),
                       ),
                     ),
                   ],

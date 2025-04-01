@@ -3,7 +3,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'dart:io';
 import 'product_screen.dart'; // Ürün sayfası
-import 'package:iprovis/services/tflite_service.dart'; // tflite_service.dart dosyasının yolu. (lib/ klasörü içinde olduğuna dikkat edin)
+import 'package:iprovis/services/tflite_service.dart'; // tflite_service.dart dosyasının yolu
 
 class CameraPage extends StatefulWidget {
   @override
