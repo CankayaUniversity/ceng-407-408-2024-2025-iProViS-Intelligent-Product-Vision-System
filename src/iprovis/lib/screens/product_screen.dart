@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:io'; // For mobile platforms
-import 'package:flutter/foundation.dart' show kIsWeb; // For platform detection
+import 'package:flutter/foundation.dart' show kIsWeb; // For platform detection;
 
 class ProductPage extends StatelessWidget {
   final String productName;
@@ -16,33 +16,70 @@ class ProductPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(productName),
-      ),
+      appBar: AppBar(title: Text(productName)),
       body: SingleChildScrollView(
         child: Column(
-          children: <Widget>[
-            // Display the image based on the platform
-            kIsWeb
-                ? Image.network(productImage) // Use Image.network for web
-                : Image.file(File(productImage)), // Use Image.file for mobile
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
-                productName,
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // Ürün Adı ve Resmi
+            Container(
+              color: Theme.of(context).colorScheme.surface,
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  Text(
+                    productName,
+                    style: Theme.of(context).textTheme.headlineSmall,
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 16),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child:
+                        kIsWeb
+                            ? Image.network(
+                              productImage,
+                              height: 200,
+                              fit: BoxFit.contain,
+                            )
+                            : Image.file(
+                              File(productImage),
+                              height: 200,
+                              fit: BoxFit.contain,
+                            ),
+                  ),
+                ],
               ),
             ),
-            ListView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: prices.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(prices[index]['store']!),
-                  trailing: Text(prices[index]['price']!),
-                );
-              },
+
+            // Market Fiyatları
+            Card(
+              margin: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ListTile(
+                    title: Text(
+                      'Market Fiyatları',
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    leading: const Icon(Icons.store),
+                  ),
+                  const Divider(),
+                  ...prices.map((price) {
+                    return ListTile(
+                      title: Text(price['store']!),
+                      trailing: Text(
+                        price['price']!,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ],
+              ),
             ),
           ],
         ),
