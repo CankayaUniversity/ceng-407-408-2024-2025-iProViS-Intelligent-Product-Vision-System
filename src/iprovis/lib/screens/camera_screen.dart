@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:image_picker/image_picker.dart'; // Galeri için gerekli paket
 import 'dart:io';
 import 'product_screen.dart'; // Ürün sayfası
 import 'package:iprovis/services/tflite_service.dart'; // tflite_service.dart dosyasının yolu
@@ -16,12 +17,12 @@ class _CameraPageState extends State<CameraPage> {
   late Future<void> _modelLoadedFuture;
   bool _isCameraReady = false;
   final TFLiteService _tfliteService = TFLiteService();
+  final ImagePicker _imagePicker = ImagePicker(); // ImagePicker örneği
 
   @override
   void initState() {
     super.initState();
     _initializeCamera();
-    // Modelin yüklenme Future'ını saklayalım
     _modelLoadedFuture = _tfliteService.loadModel();
   }
 
@@ -40,6 +41,34 @@ class _CameraPageState extends State<CameraPage> {
     });
   }
 
+  Future<void> _pickImageFromGallery() async {
+    try {
+      final pickedFile = await _imagePicker.pickImage(source: ImageSource.gallery);
+      if (pickedFile != null) {
+        final imageFile = File(pickedFile.path);
+
+        // Modeli çalıştırarak tahmin al
+        String predictedLabel = await _tfliteService.predictImage(imageFile);
+
+        // Tahmin sonucuna göre ürünü göster
+        if (mounted) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ProductPage(
+                productName: predictedLabel,
+                productImage: pickedFile.path,
+                prices: [],
+              ),
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      print('Galeriden fotoğraf seçilirken hata oluştu: $e');
+    }
+  }
+
   @override
   void dispose() {
     _cameraController.dispose();
@@ -48,7 +77,6 @@ class _CameraPageState extends State<CameraPage> {
 
   Future<void> _takePhoto() async {
     try {
-      // Kamera ve modelin yüklenmesini bekleyelim
       await _initializeControllerFuture;
       await _modelLoadedFuture;
 
@@ -60,24 +88,21 @@ class _CameraPageState extends State<CameraPage> {
         imagePath = image.path;
       }
 
-      // Modeli çalıştırarak tahmin al (Web platformunda yerel model çalıştırma desteklenmeyebilir)
       String predictedLabel = "Bilinmiyor";
       if (!kIsWeb) {
         File imageFile = File(imagePath);
         predictedLabel = await _tfliteService.predictImage(imageFile);
       }
 
-      // Tahmin sonucuna göre ürünü göster
       if (mounted) {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder:
-                (context) => ProductPage(
-                  productName: predictedLabel,
-                  productImage: imagePath,
-                  prices: [],
-                ),
+            builder: (context) => ProductPage(
+              productName: predictedLabel,
+              productImage: imagePath,
+              prices: [],
+            ),
           ),
         );
       }
@@ -100,9 +125,19 @@ class _CameraPageState extends State<CameraPage> {
           }
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _isCameraReady ? _takePhoto : null,
-        child: Icon(Icons.camera),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            onPressed: _isCameraReady ? _takePhoto : null,
+            child: Icon(Icons.camera),
+          ),
+          SizedBox(height: 10),
+          FloatingActionButton(
+            onPressed: _pickImageFromGallery,
+            child: Icon(Icons.photo),
+          ),
+        ],
       ),
     );
   }
