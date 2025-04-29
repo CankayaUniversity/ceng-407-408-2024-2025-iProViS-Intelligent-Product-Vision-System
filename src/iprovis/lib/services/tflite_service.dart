@@ -1,84 +1,82 @@
 import 'dart:io';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:tflite_flutter/tflite_flutter.dart';
 import 'package:image/image.dart' as img;
 
 class TFLiteService {
-  Interpreter?
-  _interpreter; // Nullable yaptık, böylece model yüklenmediğinde kontrol edebilelim diye.
-  final int inputSize = 224; // Modelin istediği boyutlandırma
-  final int numChannels = 3; // RGB
-  final List<String> labels = [
-    "Doritos Baharatlı Cips",
-    "Pınar Süt",
-    "Ülker Çikolatalı Gofret",
-  ];
+  Interpreter? _interpreter;
+  late List<String> _labels;
+  final int inputSize = 224;
+  final int numChannels = 3;
 
   Future<void> loadModel() async {
     try {
-      _interpreter = await Interpreter.fromAsset('assets/iprovis_model.tflite');
+      _interpreter = await Interpreter.fromAsset(
+        'assets/iprovis_model_v4.tflite',
+      );
       print("Model başarıyla yüklendi.");
+
+      final rawLabels = await rootBundle.loadString('assets/labels.txt');
+      _labels =
+          rawLabels
+              .split('\n')
+              .map((e) => e.trim())
+              .where((e) => e.isNotEmpty)
+              .toList();
+      print("${_labels.length} adet etiket yüklendi.");
     } catch (e) {
-      print("Model yüklenirken hata: $e");
+      print("loadModel() sırasında hata: $e");
       rethrow;
     }
   }
 
+  /// Fotoğrafı modele gönderip tahmin yapar
   Future<String> predictImage(File imageFile) async {
-    if (_interpreter == null) {
-      print("Interpreter henüz initialize edilmedi.");
-      return "Model yüklenemedi";
-    }
+    if (_interpreter == null) return "Model yüklenemedi";
 
-    // read image
-    final imageBytes = await imageFile.readAsBytes();
-    img.Image? oriImage = img.decodeImage(imageBytes);
-    if (oriImage == null) {
-      return "Görsel okunamadı";
-    }
-
-    // Modelin beklediği boyuta getir
-    img.Image resizedImage = img.copyResize(
+    // Görseli oku ve ön işle
+    final bytes = await imageFile.readAsBytes();
+    img.Image? oriImage = img.decodeImage(bytes);
+    if (oriImage == null) return "Görsel okunamadı";
+    img.Image resized = img.copyResize(
       oriImage,
       width: inputSize,
       height: inputSize,
     );
 
-    List<List<List<List<double>>>> input = List.generate(
+    // Input tensor
+    var input = List.generate(
       1,
       (_) => List.generate(
         inputSize,
         (_) => List.generate(inputSize, (_) => List.filled(numChannels, 0.0)),
       ),
     );
-
     for (int i = 0; i < inputSize; i++) {
       for (int j = 0; j < inputSize; j++) {
-        int pixel = resizedImage.getPixel(j, i);
-        // normalization
-        input[0][i][j][0] = img.getRed(pixel) / 255.0;
-        input[0][i][j][1] = img.getGreen(pixel) / 255.0;
-        input[0][i][j][2] = img.getBlue(pixel) / 255.0;
+        int p = resized.getPixel(j, i);
+        input[0][i][j][0] = img.getRed(p) / 255.0;
+        input[0][i][j][1] = img.getGreen(p) / 255.0;
+        input[0][i][j][2] = img.getBlue(p) / 255.0;
       }
     }
 
-    // output tensor
-    List<List<double>> output = List.generate(
-      1,
-      (_) => List.filled(labels.length, 0.0),
-    );
+    // Output tensor
+    var output = List.generate(1, (_) => List.filled(_labels.length, 0.0));
 
     // İnference
     _interpreter!.run(input, output);
 
-    double maxVal = -1;
-    int maxIndex = -1;
-    for (int i = 0; i < labels.length; i++) {
+    // En yüksek olasılığa sahip etiketi bul
+    int maxIndex = 0;
+    double maxVal = output[0][0];
+    for (int i = 1; i < _labels.length; i++) {
       if (output[0][i] > maxVal) {
         maxVal = output[0][i];
         maxIndex = i;
       }
     }
 
-    return labels[maxIndex];
+    return _labels[maxIndex];
   }
 }

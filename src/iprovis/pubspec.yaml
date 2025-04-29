@@ -25,7 +25,6 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
+    - assets/iprovis_model_v4.tflite
     - assets/labels.txt
-    - assets/iprovis_model.tflite
     - assets/images/
-
