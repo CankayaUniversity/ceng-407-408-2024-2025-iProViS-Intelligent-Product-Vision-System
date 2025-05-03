@@ -1,6 +1,8 @@
 // lib/main.dart
 import 'package:flutter/material.dart';
 import 'screens/splash_screen.dart';
+import 'screens/login_register_screen.dart';
+import 'screens/home_screen.dart'; // Ana sayfa import edildi
 
 void main() {
   runApp(const MyApp());
@@ -63,7 +65,30 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const SplashScreen(),
+      initialRoute: '/home', // Başlangıç rotası artık /home
+      routes: {'/login': (context) => LoginRegisterPage()},
+      onGenerateRoute: (settings) {
+        if (settings.name == '/home') {
+          return MaterialPageRoute(
+            builder: (context) => HomeScreen(),
+          ); // HomeScreen'i kullan
+        }
+        return null; // Eğer rota bulunamazsa null döndürülür
+      },
+      onUnknownRoute: (settings) {
+        return MaterialPageRoute(builder: (context) => UnknownRoutePage());
+      },
+      // home: const SplashScreen(), // SplashScreen kaldırıldı
+    );
+  }
+}
+
+class UnknownRoutePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Bilinmeyen Rota')),
+      body: Center(child: Text('Bu sayfa bulunamadı.')),
     );
   }
 }

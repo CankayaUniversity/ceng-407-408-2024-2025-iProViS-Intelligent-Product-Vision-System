@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'login_register_screen.dart';
 import 'camera_screen.dart';
+import 'profile_screen.dart'; // Profil sayfası import edildi
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -13,6 +15,7 @@ class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
+  bool _isLoggedIn = false;
 
   @override
   void initState() {
@@ -25,6 +28,14 @@ class _HomeScreenState extends State<HomeScreen>
       begin: 1.0,
       end: 0.95,
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+    _checkLoginStatus();
+  }
+
+  Future<void> _checkLoginStatus() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+    });
   }
 
   @override
@@ -106,19 +117,34 @@ class _HomeScreenState extends State<HomeScreen>
           IconButton(
             icon: const Icon(Icons.person_outline, size: 28),
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => LoginRegisterPage()),
-              );
+              if (_isLoggedIn) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder:
+                        (context) =>
+                            ProfileScreen(email: 'kullanici@example.com'),
+                  ), // Örnek e-posta
+                );
+              } else {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginRegisterPage()),
+                );
+              }
             },
           ),
           const SizedBox(width: 8),
         ],
       ),
       body: SafeArea(
-        child: Center( // Sayfa ortalandı
+        child: Center(
+          // Sayfa ortalandı
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 24.0,
+              vertical: 16.0,
+            ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -144,9 +170,9 @@ class _HomeScreenState extends State<HomeScreen>
                       const SizedBox(height: 16),
                       Text(
                         'Ürünün fotoğrafını çekerek fiyat karşılaştırması ve içerik bilgilerini görüntüleyin',
-                        style: Theme.of(
-                          context,
-                        ).textTheme.bodyLarge?.copyWith(color: Colors.grey[400]),
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          color: Colors.grey[400],
+                        ),
                         textAlign: TextAlign.center,
                       ),
                     ],
@@ -172,6 +198,16 @@ class _HomeScreenState extends State<HomeScreen>
           ),
         ),
       ),
+    );
+  }
+}
+
+class HomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Ana Sayfa')),
+      body: Center(child: Text('Hoş geldiniz!')),
     );
   }
 }

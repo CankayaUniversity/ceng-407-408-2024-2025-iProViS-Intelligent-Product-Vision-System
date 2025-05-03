@@ -19,7 +19,9 @@ class MongoService {
   Future<Map<String, dynamic>?> getProductInfo(String productId) async {
     try {
       final collection = _db.collection('products');
-      final product = await collection.findOne(where.eq('_id', ObjectId.parse(productId)));
+      final product = await collection.findOne(
+        where.eq('_id', ObjectId.parse(productId)),
+      );
       return product;
     } catch (e) {
       print('Ürün bilgisi alınırken hata: $e');
@@ -35,6 +37,42 @@ class MongoService {
     } catch (e) {
       print('Ürün bilgisi alınırken hata: $e');
       return null;
+    }
+  }
+
+  // Kullanıcı kayıt işlemi
+  Future<bool> registerUser(String email, String password) async {
+    try {
+      final users = _db.collection('users');
+      final existingUser = await users.findOne({'email': email});
+      if (existingUser != null) {
+        print('Bu email zaten kayıtlı.');
+        return false; // Email zaten kayıtlı
+      }
+      await users.insertOne({'email': email, 'password': password});
+      print('Kullanıcı başarıyla kaydedildi.');
+      return true; // Kayıt başarılı
+    } catch (e) {
+      print('Kayıt sırasında hata oluştu: $e');
+      return false; // Kayıt başarısız
+    }
+  }
+
+  // Kullanıcı giriş işlemi
+  Future<bool> loginUser(String email, String password) async {
+    try {
+      final users = _db.collection('users');
+      final user = await users.findOne({'email': email, 'password': password});
+      if (user != null) {
+        print('Giriş başarılı.');
+        return true; // Giriş başarılı
+      } else {
+        print('Hatalı email veya şifre.');
+        return false; // Giriş başarısız
+      }
+    } catch (e) {
+      print('Giriş sırasında hata oluştu: $e');
+      return false; // Giriş başarısız
     }
   }
 
