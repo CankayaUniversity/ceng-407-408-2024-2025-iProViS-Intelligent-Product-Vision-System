@@ -4,26 +4,35 @@ import 'dart:io';
 
 class ProductInfoScreen extends StatefulWidget {
   final String keyword;
-  final String imagePath; // Resim yolu
+  final String imagePath;
 
   const ProductInfoScreen({
-    super.key,
+    Key? key,
     required this.keyword,
     required this.imagePath,
-  });
+  }) : super(key: key);
 
   @override
   State<ProductInfoScreen> createState() => _ProductInfoScreenState();
 }
 
-class _ProductInfoScreenState extends State<ProductInfoScreen> {
+class _ProductInfoScreenState extends State<ProductInfoScreen>
+    with SingleTickerProviderStateMixin {
   final MongoService _mongoService = MongoService();
   Map<String, dynamic>? _productInfo;
+  late TabController _tabController;
 
   @override
   void initState() {
     super.initState();
+    _tabController = TabController(length: 3, vsync: this);
     _fetchProductInfo();
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 
   Future<void> _fetchProductInfo() async {
@@ -35,58 +44,132 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
     await _mongoService.close();
   }
 
+  Widget _buildPricesTab() {
+    return ListView(
+      padding: const EdgeInsets.all(8.0), // Liste öğelerine padding eklendi
+      children:
+          (_productInfo!['marketPrices'] as Map<String, dynamic>).entries
+              .map(
+                (entry) => Card(
+                  // Her fiyat bilgisi için Card widget'ı
+                  elevation: 2,
+                  child: ListTile(
+                    title: Text(entry.key),
+                    trailing: Text('${entry.value} TL'),
+                  ),
+                ),
+              )
+              .toList(),
+    );
+  }
+
+  Widget _buildNutritionInfoTab() {
+    return ListView(
+      padding: const EdgeInsets.all(8.0), // Liste öğelerine padding eklendi
+      children:
+          (_productInfo!['nutritionInfo'] as Map<String, dynamic>).entries
+              .map(
+                (entry) => Card(
+                  // Her besin bilgisi için Card widget'ı
+                  elevation: 2,
+                  child: ListTile(
+                    title: Text(entry.key),
+                    trailing: Text(entry.value.toString()),
+                  ),
+                ),
+              )
+              .toList(),
+    );
+  }
+
+  Widget _buildIngredientsTab() {
+    return ListView(
+      padding: const EdgeInsets.all(8.0), // Liste öğelerine padding eklendi
+      children:
+          (_productInfo!['ingredients'] as List<dynamic>)
+              .map(
+                (ingredient) => Card(
+                  // Her içerik bilgisi için Card widget'ı
+                  elevation: 2,
+                  child: ListTile(
+                    leading: const Icon(Icons.arrow_right),
+                    title: Text(ingredient),
+                  ),
+                ),
+              )
+              .toList(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Ürün Bilgisi')),
-      body:
-          _productInfo == null
-              ? const Center(child: CircularProgressIndicator())
-              : SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+      body: Padding(
+        padding: const EdgeInsets.all(8.0), // Sayfaya genel padding eklendi
+        child:
+            _productInfo == null
+                ? const Center(child: CircularProgressIndicator())
+                : Column(
                   children: [
-                    // Ürün resmi
-                    Image.file(
-                      File(widget.imagePath),
-                      width: double.infinity,
-                      height: 200,
-                      fit: BoxFit.cover,
+                    // Ürün fotoğrafı ve ismi
+                    Stack(
+                      alignment:
+                          Alignment.topCenter, // Ürün ismi üstte ortalanacak
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: AspectRatio(
+                            aspectRatio: 1.0, // Kare şeklinde olması için
+                            child: Image.file(
+                              File(widget.imagePath),
+                              width: 10, // Resim boyutu daha da küçültüldü
+                              height: 10, // Resim boyutu daha da küçültüldü
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          decoration: BoxDecoration(
+                            color: Colors.black54,
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          child: Text(
+                            widget.keyword,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 16),
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                    // TabBar
+                    TabBar(
+                      controller: _tabController,
+                      tabs: const [
+                        Tab(text: 'Fiyatlar'),
+                        Tab(text: 'Besin Değerleri'),
+                        Tab(text: 'İçindekiler'),
+                      ],
+                    ),
+                    // TabBarView
+                    Expanded(
+                      child: TabBarView(
+                        controller: _tabController,
                         children: [
-                          Text('Ürün Adı: ${_productInfo!['label']}'),
-                          const SizedBox(height: 10),
-                          Text('Fiyatlar:'),
-                          ...(_productInfo!['marketPrices']
-                                  as Map<String, dynamic>)
-                              .entries
-                              .map(
-                                (entry) =>
-                                    Text('${entry.key}: ${entry.value} TL'),
-                              ),
-                          const SizedBox(height: 10),
-                          Text('Besin Değerleri:'),
-                          ...(_productInfo!['nutritionInfo']
-                                  as Map<String, dynamic>)
-                              .entries
-                              .map(
-                                (entry) => Text('${entry.key}: ${entry.value}'),
-                              ),
-                          const SizedBox(height: 10),
-                          Text('İçindekiler:'),
-                          ...(_productInfo!['ingredients'] as List<dynamic>)
-                              .map((ingredient) => Text('- $ingredient')),
+                          _buildPricesTab(),
+                          _buildNutritionInfoTab(),
+                          _buildIngredientsTab(),
                         ],
                       ),
                     ),
                   ],
                 ),
-              ),
+      ),
     );
   }
 }

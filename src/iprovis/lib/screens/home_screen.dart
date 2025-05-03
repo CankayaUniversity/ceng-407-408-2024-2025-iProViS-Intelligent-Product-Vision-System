@@ -122,9 +122,10 @@ class _HomeScreenState extends State<HomeScreen>
                   context,
                   MaterialPageRoute(
                     builder:
-                        (context) =>
-                            ProfileScreen(email: 'kullanici@example.com'),
-                  ), // Örnek e-posta
+                        (context) => ProfileScreen(
+                          email: 'kullanici@example.com',
+                        ), // Örnek e-posta
+                  ),
                 );
               } else {
                 Navigator.push(
@@ -192,6 +193,25 @@ class _HomeScreenState extends State<HomeScreen>
                   backgroundColor: const Color(0xFF6750A4),
                   foregroundColor: Colors.white,
                 ),
+                if (!_isLoggedIn) // Giriş yapılmamışsa
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16.0),
+                    child: Column(
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LoginRegisterPage(),
+                              ),
+                            );
+                          },
+                          child: const Text('Giriş / Kayıt Ol'),
+                        ),
+                      ],
+                    ),
+                  ),
                 const SizedBox(height: 16),
               ],
             ),

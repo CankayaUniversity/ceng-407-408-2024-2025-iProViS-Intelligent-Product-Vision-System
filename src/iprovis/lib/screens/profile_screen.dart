@@ -81,11 +81,8 @@ class ProfileScreen extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () async {
                   final prefs = await SharedPreferences.getInstance();
-                  await prefs.setBool(
-                    'isLoggedIn',
-                    false,
-                  ); // Çıkış bilgisini kaydet
-                  Navigator.pushReplacementNamed(context, '/login');
+                  await prefs.setBool('isLoggedIn', false);
+                  Navigator.pushReplacementNamed(context, '/home');
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Theme.of(context).colorScheme.error,
