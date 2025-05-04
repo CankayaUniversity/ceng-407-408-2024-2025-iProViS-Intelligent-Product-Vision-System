@@ -1,10 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   final String email;
 
   const ProfileScreen({Key? key, required this.email}) : super(key: key);
+
+  @override
+  _ProfileScreenState createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  String? _email;
+
+  @override
+  void initState() {
+    super.initState();
+    _email = widget.email; // Initialize _email with the passed email
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +51,10 @@ class ProfileScreen extends StatelessWidget {
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     const SizedBox(height: 8),
-                    Text(email, style: Theme.of(context).textTheme.bodyLarge),
+                    Text(
+                      _email ?? 'E-posta Yok', // Null kontrolü yapılıyor
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
                   ],
                 ),
               ),
