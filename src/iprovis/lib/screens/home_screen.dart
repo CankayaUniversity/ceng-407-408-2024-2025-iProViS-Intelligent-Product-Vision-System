@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'camera_screen.dart';
 import 'login_screen.dart';
-import 'register_screen.dart'; // Import RegisterScreen
+import 'register_screen.dart';
 import 'profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -12,7 +12,8 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin {
+class _HomeScreenState extends State<HomeScreen>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
   bool _isLoggedIn = false;
@@ -27,15 +28,16 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
       duration: const Duration(milliseconds: 150),
       vsync: this,
     );
-    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.95).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-    );
+    _scaleAnimation = Tween<double>(
+      begin: 1.0,
+      end: 0.95,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
   }
 
   Future<void> _loadEmail() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _email = prefs.getString('email') ?? 'E-posta Yok'; // Doğrudan SharedPreferences'ten alınıyor
+      _email = prefs.getString('email') ?? 'E-posta Yok';
     });
   }
 
@@ -105,23 +107,33 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
     return Scaffold(
-      backgroundColor: const Color(0xFF121212),
+      backgroundColor: colorScheme.background,
       appBar: AppBar(
-        title: Image.asset('assets/images/logo.png', height: 64, fit: BoxFit.contain),
+        title: Image.asset(
+          'assets/images/logo.png',
+          height: 64,
+          fit: BoxFit.contain,
+        ),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
-          if (_isLoggedIn) // Show the profile button only if the user is logged in
+          if (_isLoggedIn)
             IconButton(
               icon: const Icon(Icons.person_outline, size: 28),
               onPressed: () async {
                 final prefs = await SharedPreferences.getInstance();
-                final email = prefs.getString('email') ?? 'kullanici@example.com'; // Retrieve email
+                final email =
+                    prefs.getString('email') ?? 'kullanici@example.com';
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ProfileScreen(email: email)),
+                  MaterialPageRoute(
+                    builder: (context) => ProfileScreen(email: email),
+                  ),
                 );
               },
             ),
@@ -138,25 +150,24 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
               Container(
                 padding: const EdgeInsets.all(24.0),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF1E1E1E),
+                  color: colorScheme.surface,
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Column(
                   children: [
                     Text(
                       'Ürün Taramasına Başlayın',
-                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
+                      style: textTheme.headlineSmall?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 16),
                     Text(
                       'Ürünün fotoğrafını çekerek fiyat karşılaştırması ve içerik bilgilerini görüntüleyin',
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            color: Colors.grey[400],
-                          ),
+                      style: textTheme.bodyLarge?.copyWith(
+                        color: colorScheme.onSurface.withOpacity(0.7),
+                      ),
                       textAlign: TextAlign.center,
                     ),
                   ],
@@ -172,8 +183,8 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                 },
                 icon: Icons.camera_alt,
                 label: 'Fotoğraf Çek',
-                backgroundColor: const Color(0xFF6750A4),
-                foregroundColor: Colors.white,
+                backgroundColor: colorScheme.primary,
+                foregroundColor: colorScheme.onPrimary,
               ),
               if (!_isLoggedIn)
                 Padding(
@@ -184,7 +195,9 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => LoginScreen()),
+                            MaterialPageRoute(
+                              builder: (context) => LoginScreen(),
+                            ),
                           );
                         },
                         child: const Text('Giriş Yap'),
@@ -194,7 +207,9 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => RegisterScreen()),
+                            MaterialPageRoute(
+                              builder: (context) => RegisterScreen(),
+                            ),
                           );
                         },
                         child: const Text('Kayıt Ol'),
