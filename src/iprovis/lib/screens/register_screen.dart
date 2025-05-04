@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../services/mongo_service.dart';
 import 'profile_screen.dart';
+import 'home_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -47,12 +48,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
           );
           final prefs = await SharedPreferences.getInstance();
           await prefs.setBool('isLoggedIn', true);
-          await prefs.setString('email', emailController.text.trim()); // Save email
+          await prefs.setString(
+            'email',
+            emailController.text.trim(),
+          ); // Save email
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(
-              builder: (context) => ProfileScreen(email: emailController.text.trim()),
-            ),
+            MaterialPageRoute(builder: (context) => HomeScreen()),
           );
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -125,9 +127,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
               _isLoading
                   ? const CircularProgressIndicator()
                   : ElevatedButton(
-                      onPressed: _handleRegister,
-                      child: const Text('Register'),
-                    ),
+                    onPressed: _handleRegister,
+                    child: const Text('Register'),
+                  ),
             ],
           ),
         ),
