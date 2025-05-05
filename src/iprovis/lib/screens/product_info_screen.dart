@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../services/mongo_service.dart';
 import 'dart:io';
+import 'package:easy_localization/easy_localization.dart';
 
 class ProductInfoScreen extends StatefulWidget {
   final String keyword;
@@ -46,12 +47,11 @@ class _ProductInfoScreenState extends State<ProductInfoScreen>
 
   Widget _buildPricesTab() {
     return ListView(
-      padding: const EdgeInsets.all(8.0), // Liste öğelerine padding eklendi
+      padding: const EdgeInsets.all(8.0),
       children:
           (_productInfo!['marketPrices'] as Map<String, dynamic>).entries
               .map(
                 (entry) => Card(
-                  // Her fiyat bilgisi için Card widget'ı
                   elevation: 2,
                   child: ListTile(
                     title: Text(entry.key),
@@ -65,12 +65,11 @@ class _ProductInfoScreenState extends State<ProductInfoScreen>
 
   Widget _buildNutritionInfoTab() {
     return ListView(
-      padding: const EdgeInsets.all(8.0), // Liste öğelerine padding eklendi
+      padding: const EdgeInsets.all(8.0),
       children:
           (_productInfo!['nutritionInfo'] as Map<String, dynamic>).entries
               .map(
                 (entry) => Card(
-                  // Her besin bilgisi için Card widget'ı
                   elevation: 2,
                   child: ListTile(
                     title: Text(entry.key),
@@ -84,12 +83,11 @@ class _ProductInfoScreenState extends State<ProductInfoScreen>
 
   Widget _buildIngredientsTab() {
     return ListView(
-      padding: const EdgeInsets.all(8.0), // Liste öğelerine padding eklendi
+      padding: const EdgeInsets.all(8.0),
       children:
           (_productInfo!['ingredients'] as List<dynamic>)
               .map(
                 (ingredient) => Card(
-                  // Her içerik bilgisi için Card widget'ı
                   elevation: 2,
                   child: ListTile(
                     leading: const Icon(Icons.arrow_right),
@@ -104,27 +102,25 @@ class _ProductInfoScreenState extends State<ProductInfoScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Ürün Bilgisi')),
+      appBar: AppBar(title: Text('product_info'.tr())),
       body: Padding(
-        padding: const EdgeInsets.all(8.0), // Sayfaya genel padding eklendi
+        padding: const EdgeInsets.all(8.0),
         child:
             _productInfo == null
                 ? const Center(child: CircularProgressIndicator())
                 : Column(
                   children: [
-                    // Ürün fotoğrafı ve ismi
                     Stack(
-                      alignment:
-                          Alignment.topCenter, // Ürün ismi üstte ortalanacak
+                      alignment: Alignment.topCenter,
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(4.0),
                           child: AspectRatio(
-                            aspectRatio: 1.0, // Kare şeklinde olması için
+                            aspectRatio: 1.0,
                             child: Image.file(
                               File(widget.imagePath),
-                              width: 10, // Resim boyutu daha da küçültüldü
-                              height: 10, // Resim boyutu daha da küçültüldü
+                              width: 10,
+                              height: 10,
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -147,16 +143,14 @@ class _ProductInfoScreenState extends State<ProductInfoScreen>
                         ),
                       ],
                     ),
-                    // TabBar
                     TabBar(
                       controller: _tabController,
-                      tabs: const [
-                        Tab(text: 'Fiyatlar'),
-                        Tab(text: 'Besin Değerleri'),
-                        Tab(text: 'İçindekiler'),
+                      tabs: [
+                        Tab(text: 'prices'.tr()),
+                        Tab(text: 'nutrition'.tr()),
+                        Tab(text: 'ingredients'.tr()),
                       ],
                     ),
-                    // TabBarView
                     Expanded(
                       child: TabBarView(
                         controller: _tabController,

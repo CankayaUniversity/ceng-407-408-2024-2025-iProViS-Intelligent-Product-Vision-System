@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class UnknownRoutePage extends StatelessWidget {
   const UnknownRoutePage({Key? key}) : super(key: key);
@@ -6,12 +7,8 @@ class UnknownRoutePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Unknown Route'),
-      ),
-      body: const Center(
-        child: Text('The page you are looking for does not exist.'),
-      ),
+      appBar: AppBar(title: Text('unknown_route'.tr())),
+      body: Center(child: Text('page_not_found'.tr())),
     );
   }
 }

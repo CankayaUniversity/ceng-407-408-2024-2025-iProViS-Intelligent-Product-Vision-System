@@ -1,6 +1,7 @@
 // lib/main.dart
 import 'package:flutter/material.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'screens/splash_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/register_screen.dart';
@@ -9,8 +10,23 @@ import 'screens/unknown_route_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized(); // Ensure EasyLocalization is initialized
   final savedThemeMode = await AdaptiveTheme.getThemeMode();
-  runApp(MyApp(savedThemeMode: savedThemeMode));
+  runApp(
+    EasyLocalization(
+      supportedLocales: const [
+        Locale('en'),
+        Locale('tr'),
+        Locale('es'),
+        Locale('de'),
+        Locale('fr'),
+      ],
+      path:
+          'assets/translations', // Path to translation files, make sure it matches the one in pubspec.yaml
+      fallbackLocale: const Locale('en'),
+      child: MyApp(savedThemeMode: savedThemeMode),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -87,6 +103,9 @@ class MyApp extends StatelessWidget {
             title: 'iProViS',
             theme: theme,
             darkTheme: darkTheme,
+            localizationsDelegates: context.localizationDelegates,
+            supportedLocales: context.supportedLocales,
+            locale: context.locale,
             initialRoute: '/home',
             routes: {
               '/login': (context) => LoginScreen(),

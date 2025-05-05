@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../services/mongo_service.dart';
 import 'profile_screen.dart';
 import 'home_screen.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -41,30 +42,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
         );
 
         if (success) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Registration successful! You can log in.'),
-            ),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text('register_success'.tr())));
           final prefs = await SharedPreferences.getInstance();
           await prefs.setBool('isLoggedIn', true);
-          await prefs.setString(
-            'email',
-            emailController.text.trim(),
-          ); // Save email
+          await prefs.setString('email', emailController.text.trim());
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => HomeScreen()),
           );
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('This email is already registered.')),
+            SnackBar(content: Text('email_already_registered'.tr())),
           );
         }
       } catch (e) {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text('An error occurred: $e')));
+        ).showSnackBar(SnackBar(content: Text('${'error_occurred'.tr()}: $e')));
       } finally {
         setState(() {
           _isLoading = false;
@@ -76,7 +72,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Register')),
+      appBar: AppBar(title: Text('register'.tr())),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -87,19 +83,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
             children: [
               TextFormField(
                 controller: emailController,
-                decoration: const InputDecoration(
-                  labelText: 'Email',
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.email),
+                decoration: InputDecoration(
+                  labelText: 'email'.tr(),
+                  border: const OutlineInputBorder(),
+                  prefixIcon: const Icon(Icons.email),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your email address.';
+                    return 'enter_email'.tr();
                   }
                   if (!RegExp(
                     r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
                   ).hasMatch(value)) {
-                    return 'Please enter a valid email address.';
+                    return 'invalid_email'.tr();
                   }
                   return null;
                 },
@@ -108,17 +104,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
               TextFormField(
                 controller: passwordController,
                 obscureText: true,
-                decoration: const InputDecoration(
-                  labelText: 'Password',
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.lock),
+                decoration: InputDecoration(
+                  labelText: 'password'.tr(),
+                  border: const OutlineInputBorder(),
+                  prefixIcon: const Icon(Icons.lock),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your password.';
+                    return 'enter_password'.tr();
                   }
                   if (value.length < 6) {
-                    return 'Your password must be at least 6 characters.';
+                    return 'password_length'.tr();
                   }
                   return null;
                 },
@@ -128,7 +124,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ? const CircularProgressIndicator()
                   : ElevatedButton(
                     onPressed: _handleRegister,
-                    child: const Text('Register'),
+                    child: Text('register'.tr()),
                   ),
             ],
           ),

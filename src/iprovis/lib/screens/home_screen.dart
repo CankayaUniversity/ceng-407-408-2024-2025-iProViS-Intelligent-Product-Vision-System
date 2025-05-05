@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'camera_screen.dart';
 import 'login_screen.dart';
 import 'register_screen.dart';
@@ -122,6 +123,22 @@ class _HomeScreenState extends State<HomeScreen>
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
+          DropdownButton<Locale>(
+            underline: const SizedBox(),
+            icon: const Icon(Icons.language, color: Colors.white),
+            onChanged: (Locale? locale) {
+              if (locale != null) {
+                context.setLocale(locale);
+              }
+            },
+            items: const [
+              DropdownMenuItem(value: Locale('en'), child: Text("EN")),
+              DropdownMenuItem(value: Locale('tr'), child: Text("TR")),
+              DropdownMenuItem(value: Locale('es'), child: Text("ES")),
+              DropdownMenuItem(value: Locale('de'), child: Text("DE")),
+              DropdownMenuItem(value: Locale('fr'), child: Text("FR")),
+            ],
+          ),
           if (_isLoggedIn)
             IconButton(
               icon: const Icon(Icons.person_outline, size: 28),
@@ -156,7 +173,7 @@ class _HomeScreenState extends State<HomeScreen>
                 child: Column(
                   children: [
                     Text(
-                      'Ürün Taramasına Başlayın',
+                      'start_scanning'.tr(),
                       style: textTheme.headlineSmall?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -164,7 +181,7 @@ class _HomeScreenState extends State<HomeScreen>
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      'Ürünün fotoğrafını çekerek fiyat karşılaştırması ve içerik bilgilerini görüntüleyin',
+                      'description'.tr(),
                       style: textTheme.bodyLarge?.copyWith(
                         color: colorScheme.onSurface.withOpacity(0.7),
                       ),
@@ -182,7 +199,7 @@ class _HomeScreenState extends State<HomeScreen>
                   );
                 },
                 icon: Icons.camera_alt,
-                label: 'Fotoğraf Çek',
+                label: 'take_photo'.tr(),
                 backgroundColor: colorScheme.primary,
                 foregroundColor: colorScheme.onPrimary,
               ),
@@ -200,7 +217,7 @@ class _HomeScreenState extends State<HomeScreen>
                             ),
                           );
                         },
-                        child: const Text('Giriş Yap'),
+                        child: Text('login'.tr()),
                       ),
                       const SizedBox(height: 8),
                       ElevatedButton(
@@ -212,7 +229,7 @@ class _HomeScreenState extends State<HomeScreen>
                             ),
                           );
                         },
-                        child: const Text('Kayıt Ol'),
+                        child: Text('register'.tr()),
                       ),
                     ],
                   ),

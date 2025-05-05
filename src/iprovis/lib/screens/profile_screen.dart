@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class ProfileScreen extends StatefulWidget {
   final String email;
@@ -26,7 +27,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profil'),
+        title: Text('profile'.tr()),
         backgroundColor: Theme.of(context).colorScheme.primary,
       ),
       body: SingleChildScrollView(
@@ -35,7 +36,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Kullanıcı Bilgileri',
+              'user_info'.tr(),
               style: Theme.of(context).textTheme.headlineSmall,
             ),
             const SizedBox(height: 20),
@@ -48,12 +49,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'E-posta',
+                      'email'.tr(),
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      _email ?? 'E-posta Yok',
+                      _email ?? 'no_email'.tr(),
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                   ],
@@ -63,39 +64,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
             const SizedBox(height: 20),
 
             Text(
-              'Navigasyon',
+              'navigation'.tr(),
               style: Theme.of(context).textTheme.headlineSmall,
             ),
             const SizedBox(height: 20),
 
             ListTile(
               leading: const Icon(Icons.home),
-              title: const Text('Ana Sayfa'),
-              onTap: () {
-                Navigator.pushReplacementNamed(context, '/home');
-              },
+              title: Text('home'.tr()),
+              onTap: () => Navigator.pushReplacementNamed(context, '/home'),
             ),
             ListTile(
               leading: const Icon(Icons.camera_alt),
-              title: const Text('Kamera'),
-              onTap: () {
-                Navigator.pushNamed(context, '/camera');
-              },
+              title: Text('camera'.tr()),
+              onTap: () => Navigator.pushNamed(context, '/camera'),
             ),
             ListTile(
               leading: const Icon(Icons.settings),
-              title: const Text('Ayarlar'),
-              onTap: () {
-                Navigator.pushNamed(context, '/settings');
-              },
+              title: Text('settings'.tr()),
+              onTap: () => Navigator.pushNamed(context, '/settings'),
             ),
 
             const SizedBox(height: 20),
 
-            // 🌗 Tema Değiştirici
-            Text('Tema', style: Theme.of(context).textTheme.headlineSmall),
+            Text(
+              'theme'.tr(),
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
             SwitchListTile(
-              title: const Text("Karanlık Tema"),
+              title: Text("dark_mode".tr()),
               secondary: const Icon(Icons.brightness_6),
               value: isDark,
               onChanged: (val) {
@@ -104,7 +101,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 } else {
                   AdaptiveTheme.of(context).setLight();
                 }
-                setState(() {}); // switch durumunu güncelle
+                setState(() {});
               },
             ),
 
@@ -121,7 +118,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   backgroundColor: Theme.of(context).colorScheme.error,
                   foregroundColor: Colors.white,
                 ),
-                child: const Text('Çıkış Yap'),
+                child: Text('logout'.tr()),
               ),
             ),
           ],
