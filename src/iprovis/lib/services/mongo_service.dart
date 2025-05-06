@@ -1,24 +1,72 @@
 import 'package:mongo_dart/mongo_dart.dart';
 
 class MongoService {
-  // Yerel MongoDB bağlantı dizesi
-  final String _connectionString = 'mongodb://10.0.2.2:27017/iprovis';
-  late Db _db;
+  static final MongoService _instance = MongoService._internal();
+  factory MongoService() => _instance;
+  MongoService._internal();
+
+  final String _connectionString = 
+    'mongodb://10.0.2.2:27017/iprovis';
+  Db? _db;
+  bool _isConnecting = false;
 
   Future<void> connect() async {
+    if (_db != null && _db!.state == State.OPEN) {
+      print('Already connected');
+      return;
+    }
+
+    if (_isConnecting) {
+      print('Connection in progress');
+      return;
+    }
+
+    _isConnecting = true;
+    try {
+      _db = await Db.create(_connectionString);
+      await _db!.open();
+      print('MongoDB connection successful');
+    } catch (e) {
+      print('MongoDB connection error: $e');
+      rethrow;
+    } finally {
+      _isConnecting = false;
+    }
+  }
+
+  Future<Db> _getDb() async {
+    if (_db != null && _db!.state == State.OPEN) {
+      return _db!;
+    }
+
+    if (_isConnecting) {
+      // Wait until the existing connection attempt completes
+      while (_isConnecting) {
+        await Future.delayed(Duration(milliseconds: 100));
+      }
+      if (_db != null && _db!.state == State.OPEN) {
+        return _db!;
+      }
+    }
+
+    _isConnecting = true;
     try {
       _db = Db(_connectionString);
-      await _db.open();
+      await _db!.open();
       print('MongoDB bağlantısı başarılı.');
+      return _db!;
     } catch (e) {
       print('MongoDB bağlantı hatası: $e');
       rethrow;
+    } finally {
+      _isConnecting = false;
     }
   }
 
   Future<Map<String, dynamic>?> getProductInfo(String productId) async {
     try {
-      final collection = _db.collection('products');
+      final db = await _getDb();
+      final collection = db.collection('products');
       final product = await collection.findOne(
         where.eq('_id', ObjectId.parse(productId)),
       );
@@ -31,7 +79,8 @@ class MongoService {
 
   Future<Map<String, dynamic>?> getProductByKeyword(String keyword) async {
     try {
-      final collection = _db.collection('products');
+      final db = await _getDb();
+      final collection = db.collection('products');
       final product = await collection.findOne(where.eq('label', keyword));
       return product;
     } catch (e) {
@@ -40,44 +89,54 @@ class MongoService {
     }
   }
 
-  // Kullanıcı kayıt işlemi
-  Future<bool> registerUser(String email, String password) async {
+  Future<bool> loginUser(String email, String password) async {
     try {
-      final users = _db.collection('users');
-      final existingUser = await users.findOne({'email': email});
-      if (existingUser != null) {
-        print('Bu email zaten kayıtlı.');
-        return false; // Email zaten kayıtlı
-      }
-      await users.insertOne({'email': email, 'password': password});
-      print('Kullanıcı başarıyla kaydedildi.');
-      return true; // Kayıt başarılı
+      final db = await _getDb();
+      final collection = db.collection('users');
+      final user = await collection.findOne({
+        'email': email,
+        'password': password
+      });
+      return user != null;
     } catch (e) {
-      print('Kayıt sırasında hata oluştu: $e');
-      return false; // Kayıt başarısız
+      print('Giriş sırasında hata oluştu: $e');
+      return false;
     }
   }
 
-  // Kullanıcı giriş işlemi
-  Future<bool> loginUser(String email, String password) async {
+  Future<bool> registerUser(String email, String password) async {
+    if (_db == null || _db!.state != State.OPEN) {
+      await connect();
+    }
+
     try {
-      final users = _db.collection('users');
-      final user = await users.findOne({'email': email, 'password': password});
-      if (user != null) {
-        print('Giriş başarılı.');
-        return true; // Giriş başarılı
-      } else {
-        print('Hatalı email veya şifre.');
-        return false; // Giriş başarısız
+      final users = _db!.collection('users');
+      
+      // Check if user already exists
+      final existingUser = await users.findOne({'email': email});
+      if (existingUser != null) {
+        print('Email already registered');
+        return false;
       }
+
+      // Insert new user
+      await users.insertOne({
+        'email': email,
+        'password': password,
+        'createdAt': DateTime.now(),
+      });
+      
+      print('User registered successfully');
+      return true;
     } catch (e) {
-      print('Giriş sırasında hata oluştu: $e');
-      return false; // Giriş başarısız
+      print('Registration error: $e');
+      return false;
     }
   }
 
   Future<void> close() async {
-    await _db.close();
-    print('MongoDB bağlantısı kapatıldı.');
+    if (_db != null && _db!.state == State.OPEN) {
+      await _db!.close();
+    }
   }
 }

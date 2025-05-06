@@ -19,7 +19,19 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    _mongoService.connect();
+    _initializeConnection();
+  }
+
+  Future<void> _initializeConnection() async {
+    try {
+      await _mongoService.connect();
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('database_connection_error'.tr())),
+        );
+      }
+    }
   }
 
   @override
