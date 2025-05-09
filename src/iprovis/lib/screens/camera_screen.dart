@@ -14,7 +14,6 @@ class CameraPage extends StatefulWidget {
 class _CameraPageState extends State<CameraPage> {
   late CameraController _cameraController;
   late Future<void> _initializeControllerFuture;
-  late Future<void> _modelLoadedFuture;
   bool _isCameraReady = false;
   final TFLiteService _tfliteService = TFLiteService();
   final ImagePicker _imagePicker = ImagePicker();
@@ -23,7 +22,7 @@ class _CameraPageState extends State<CameraPage> {
   void initState() {
     super.initState();
     _initializeCamera();
-    _modelLoadedFuture = _tfliteService.loadModel();
+    _tfliteService.loadModel(); // Load the model without assigning it to a field
   }
 
   Future<void> _initializeCamera() async {
