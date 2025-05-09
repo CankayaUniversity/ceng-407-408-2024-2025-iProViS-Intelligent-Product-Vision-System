@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:iprovis/services/tflite_service.dart';
@@ -34,7 +33,7 @@ class _CameraPageState extends State<CameraPage> {
     _cameraController = CameraController(firstCamera, ResolutionPreset.medium);
 
     _initializeControllerFuture = _cameraController.initialize();
-    _initializeControllerFuture.then((_) {
+    initializeControllerFuture.then(() {
       if (!mounted) return;
       setState(() {
         _isCameraReady = true;
