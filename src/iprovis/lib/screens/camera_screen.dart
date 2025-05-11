@@ -32,11 +32,12 @@ class _CameraPageState extends State<CameraPage> {
     _cameraController = CameraController(firstCamera, ResolutionPreset.medium);
 
     _initializeControllerFuture = _cameraController.initialize();
-    initializeControllerFuture.then(() {
+    _initializeControllerFuture.then((_) {
       if (!mounted) return;
       setState(() {
         _isCameraReady = true;
       });
+      return null;
     });
   }
 
