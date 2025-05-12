@@ -7,6 +7,8 @@ import 'package:iprovis/screens/product_info_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class CameraPage extends StatefulWidget {
+  const CameraPage({Key? key}) : super(key: key); // Add the Key parameter
+
   @override
   _CameraPageState createState() => _CameraPageState();
 }
@@ -22,7 +24,8 @@ class _CameraPageState extends State<CameraPage> {
   void initState() {
     super.initState();
     _initializeCamera();
-    _tfliteService.loadModel(); // Load the model without assigning it to a field
+    _tfliteService
+        .loadModel(); // Load the model without assigning it to a field
   }
 
   Future<void> _initializeCamera() async {
