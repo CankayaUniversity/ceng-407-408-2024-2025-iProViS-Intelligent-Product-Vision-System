@@ -18,13 +18,11 @@ class _HomeScreenState extends State<HomeScreen>
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
   bool _isLoggedIn = false;
-  String _email = 'E-posta Yok';
 
   @override
   void initState() {
     super.initState();
     _checkLoginStatus();
-    _loadEmail();
     _controller = AnimationController(
       duration: const Duration(milliseconds: 150),
       vsync: this,
@@ -33,13 +31,6 @@ class _HomeScreenState extends State<HomeScreen>
       begin: 1.0,
       end: 0.95,
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
-  }
-
-  Future<void> _loadEmail() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _email = prefs.getString('email') ?? 'E-posta Yok';
-    });
   }
 
   @override
