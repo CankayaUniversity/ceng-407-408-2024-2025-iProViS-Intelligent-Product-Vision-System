@@ -19,6 +19,10 @@ dependencies:
   mongo_dart: ^0.10.0
   adaptive_theme: ^3.7.0
   easy_localization: ^3.0.7
+  url_launcher: ^6.3.1
+  geolocator: ^14.0.0
+  flutter_map: ^8.1.1
+  latlong2: ^0.9.1
 
 dev_dependencies:
   flutter_test:
