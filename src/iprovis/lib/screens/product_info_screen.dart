@@ -277,7 +277,11 @@ class _ProductInfoScreenState extends State<ProductInfoScreen>
                               List<String> saved =
                                   prefs.getStringList('savedProducts_$email') ??
                                   [];
-                              saved.add(widget.keyword);
+                              Map<String, String> product = {
+                                'keyword': widget.keyword,
+                                'imagePath': widget.imagePath,
+                              };
+                              saved.add(jsonEncode(product));
                               await prefs.setStringList(
                                 'savedProducts_$email',
                                 saved.toSet().toList(),
