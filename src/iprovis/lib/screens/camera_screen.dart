@@ -7,7 +7,7 @@ import 'package:iprovis/screens/product_info_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class CameraPage extends StatefulWidget {
-  const CameraPage({Key? key}) : super(key: key); // Add the Key parameter
+  const CameraPage({Key? key}) : super(key: key);
 
   @override
   _CameraPageState createState() => _CameraPageState();
@@ -24,8 +24,7 @@ class _CameraPageState extends State<CameraPage> {
   void initState() {
     super.initState();
     _initializeCamera();
-    _tfliteService
-        .loadModel(); // Load the model without assigning it to a field
+    _tfliteService.loadModel(); // Modeli yükle
   }
 
   Future<void> _initializeCamera() async {
@@ -40,12 +39,20 @@ class _CameraPageState extends State<CameraPage> {
       setState(() {
         _isCameraReady = true;
       });
-      return null;
     });
   }
 
   Future<void> _processImage(String imagePath) async {
     String predictedLabel = await _tfliteService.predictImage(File(imagePath));
+
+    if (predictedLabel.toLowerCase().contains('unknown') ||
+        predictedLabel.trim().isEmpty) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Ürün tanınamadı, lütfen tekrar deneyin.")),
+      );
+      return;
+    }
 
     if (mounted) {
       Navigator.push(
@@ -100,7 +107,7 @@ class _CameraPageState extends State<CameraPage> {
           if (snapshot.connectionState == ConnectionState.done) {
             return CameraPreview(_cameraController);
           } else {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
         },
       ),
@@ -110,13 +117,13 @@ class _CameraPageState extends State<CameraPage> {
           FloatingActionButton(
             onPressed: _isCameraReady ? _takePhoto : null,
             tooltip: 'take_photo'.tr(),
-            child: Icon(Icons.camera),
+            child: const Icon(Icons.camera),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           FloatingActionButton(
             onPressed: _pickImageFromGallery,
             tooltip: 'select_from_gallery'.tr(),
-            child: Icon(Icons.photo),
+            child: const Icon(Icons.photo),
           ),
         ],
       ),

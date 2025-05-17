@@ -29,20 +29,22 @@ class _ProductInfoScreenState extends State<ProductInfoScreen>
   late TabController _tabController;
   LatLng? _userLocation;
   GoogleMapController? _mapController;
-  bool _isLoggedIn = false; // <-- Eklendi
+  bool _isLoggedIn = false;
+  String? _userEmail;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
     _fetchProductInfo();
-    _checkLoginStatus(); // <-- Eklendi
+    _checkLoginStatus();
   }
 
   Future<void> _checkLoginStatus() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       _isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+      _userEmail = prefs.getString('email');
     });
   }
 
@@ -244,26 +246,52 @@ class _ProductInfoScreenState extends State<ProductInfoScreen>
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child:
-                          _isLoggedIn
-                              ? ElevatedButton.icon(
-                                onPressed: () => _showGoogleMapDialog(context),
-                                icon: const Icon(Icons.map),
-                                label: const Text('Haritada Marketleri Göster'),
-                              )
-                              : ElevatedButton.icon(
-                                onPressed: () {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                        'Lütfen harita özelliğini kullanmak için giriş yapınız.',
-                                      ),
-                                    ),
-                                  );
-                                },
-                                icon: const Icon(Icons.lock),
-                                label: const Text('Haritada Marketleri Göster'),
-                              ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          IconButton(
+                            onPressed:
+                                _isLoggedIn
+                                    ? () => _showGoogleMapDialog(context)
+                                    : () {
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                            'Lütfen harita özelliğini kullanmak için giriş yapınız.',
+                                          ),
+                                        ),
+                                      );
+                                    },
+                            icon: const Icon(Icons.map),
+                            tooltip: 'Haritada Marketleri Göster',
+                          ),
+                          const SizedBox(width: 10),
+                          IconButton(
+                            icon: const Icon(Icons.favorite),
+                            onPressed: () async {
+                              final prefs =
+                                  await SharedPreferences.getInstance();
+                              final email = _userEmail ?? '';
+                              List<String> saved =
+                                  prefs.getStringList('savedProducts_$email') ??
+                                  [];
+                              saved.add(widget.keyword);
+                              await prefs.setStringList(
+                                'savedProducts_$email',
+                                saved.toSet().toList(),
+                              );
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Ürün kaydedildi.'),
+                                ),
+                              );
+                            },
+                            tooltip: 'Kaydet',
+                          ),
+                        ],
+                      ),
                     ),
                     TabBar(
                       controller: _tabController,

@@ -7,6 +7,18 @@ import 'screens/register_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/unknown_route_page.dart';
 import 'themes/app_theme.dart';
+import 'package:iprovis/screens/camera_screen.dart';
+import 'package:flutter/material.dart'; // Import if not already imported
+
+class ProfileScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Profile')),
+      body: Center(child: Text('Profile Screen Content')),
+    );
+  }
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,29 +52,33 @@ class MyApp extends StatelessWidget {
       light: AppTheme.lightTheme,
       dark: AppTheme.darkTheme,
       initial: savedThemeMode ?? AdaptiveThemeMode.dark,
-      builder: (theme, darkTheme) => MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'iProViS',
-        theme: theme,
-        darkTheme: darkTheme,
-        localizationsDelegates: context.localizationDelegates,
-        supportedLocales: context.supportedLocales,
-        locale: context.locale,
-        initialRoute: '/home',
-        routes: {
-          '/login': (context) => LoginScreen(),
-          '/register': (context) => RegisterScreen(),
-        },
-        onGenerateRoute: (settings) {
-          if (settings.name == '/home') {
-            return MaterialPageRoute(builder: (context) => HomeScreen());
-          }
-          return null;
-        },
-        onUnknownRoute:
-            (settings) =>
-                MaterialPageRoute(builder: (context) => UnknownRoutePage()),
-      ),
+      builder:
+          (theme, darkTheme) => MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'iProViS',
+            theme: theme,
+            darkTheme: darkTheme,
+            localizationsDelegates: context.localizationDelegates,
+            supportedLocales: context.supportedLocales,
+            locale: context.locale,
+            initialRoute: '/home',
+            routes: {
+              '/home': (context) => HomeScreen(), // Örnek olarak HomeScreen
+              '/profile': (context) => ProfileScreen(), // Profil sayfası
+              '/camera_screen': (context) => CameraPage(), // Camera sayfası
+              '/login': (context) => LoginScreen(),
+              '/register': (context) => RegisterScreen(),
+            },
+            onGenerateRoute: (settings) {
+              if (settings.name == '/home') {
+                return MaterialPageRoute(builder: (context) => HomeScreen());
+              }
+              return null;
+            },
+            onUnknownRoute:
+                (settings) =>
+                    MaterialPageRoute(builder: (context) => UnknownRoutePage()),
+          ),
     );
   }
 }

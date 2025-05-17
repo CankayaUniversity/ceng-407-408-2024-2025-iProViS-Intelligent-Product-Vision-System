@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:iprovis/screens/product_info_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   final String email;
@@ -19,6 +20,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void initState() {
     super.initState();
     _email = widget.email;
+  }
+
+  Future<List<String>> _loadSavedProducts() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getStringList('savedProducts_${_email ?? ""}') ?? [];
+  }
+
+  Future<void> _removeSavedProduct(String product) async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> saved =
+        prefs.getStringList('savedProducts_${_email ?? ""}') ?? [];
+    saved.remove(product);
+    await prefs.setStringList('savedProducts_${_email ?? ""}', saved);
+    setState(() {});
   }
 
   @override
@@ -40,7 +55,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
               style: Theme.of(context).textTheme.headlineSmall,
             ),
             const SizedBox(height: 20),
-
             Card(
               elevation: 4,
               child: Padding(
@@ -62,13 +76,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
             const SizedBox(height: 20),
-
             Text(
               'navigation'.tr(),
               style: Theme.of(context).textTheme.headlineSmall,
             ),
             const SizedBox(height: 20),
-
             ListTile(
               leading: const Icon(Icons.home),
               title: Text('home'.tr()),
@@ -77,16 +89,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ListTile(
               leading: const Icon(Icons.camera_alt),
               title: Text('camera'.tr()),
-              onTap: () => Navigator.pushNamed(context, '/camera'),
+              onTap:
+                  () =>
+                      Navigator.pushReplacementNamed(context, '/camera_screen'),
             ),
-            ListTile(
-              leading: const Icon(Icons.settings),
-              title: Text('settings'.tr()),
-              onTap: () => Navigator.pushNamed(context, '/settings'),
-            ),
-
             const SizedBox(height: 20),
-
             Text(
               'theme'.tr(),
               style: Theme.of(context).textTheme.headlineSmall,
@@ -104,9 +111,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 setState(() {});
               },
             ),
-
             const SizedBox(height: 20),
-
             Center(
               child: ElevatedButton(
                 onPressed: () async {
@@ -120,6 +125,47 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 child: Text('logout'.tr()),
               ),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              'Kaydedilen Ürünler',
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
+            const SizedBox(height: 10),
+            FutureBuilder<List<String>>(
+              future: _loadSavedProducts(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return Text('Kaydedilen ürün yok.');
+                }
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children:
+                      snapshot.data!.map((label) {
+                        return Card(
+                          child: ListTile(
+                            title: Text(label),
+                            trailing: IconButton(
+                              icon: const Icon(Icons.delete),
+                              onPressed: () => _removeSavedProduct(label),
+                            ),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder:
+                                      (_) => ProductInfoScreen(
+                                        keyword: label,
+                                        imagePath: '',
+                                      ),
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      }).toList(),
+                );
+              },
             ),
           ],
         ),

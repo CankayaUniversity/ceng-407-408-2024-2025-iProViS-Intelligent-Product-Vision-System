@@ -77,6 +77,15 @@ class TFLiteService {
       }
     }
 
+    // Ek güvenlik kontrolleri
+    final sortedScores = output[0].toList()..sort((a, b) => b.compareTo(a));
+    final top1 = sortedScores[0];
+    final top2 = sortedScores.length > 1 ? sortedScores[1] : 0.0;
+
+    if (top1 < 0.8 || (top1 - top2) < 0.1) {
+      return "unknown";
+    }
+
     return _labels[maxIndex];
   }
 }
