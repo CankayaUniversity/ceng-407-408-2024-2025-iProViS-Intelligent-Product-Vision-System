@@ -4,6 +4,9 @@ import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProductInfoScreen extends StatefulWidget {
   final String keyword;
@@ -24,15 +27,23 @@ class _ProductInfoScreenState extends State<ProductInfoScreen>
   final MongoService _mongoService = MongoService();
   Map<String, dynamic>? _productInfo;
   late TabController _tabController;
-
-  GoogleMapController? _mapController;
   LatLng? _userLocation;
+  GoogleMapController? _mapController;
+  bool _isLoggedIn = false; // <-- Eklendi
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
     _fetchProductInfo();
+    _checkLoginStatus(); // <-- Eklendi
+  }
+
+  Future<void> _checkLoginStatus() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+    });
   }
 
   @override
@@ -50,6 +61,39 @@ class _ProductInfoScreenState extends State<ProductInfoScreen>
     await _mongoService.close();
   }
 
+  Future<List<Marker>> fetchNearbyMarketsFromPlacesAPI(LatLng location) async {
+    const String apiKey = "AIzaSyBJS4mhiK-84DcJmS6VILYR50QkExbewx0";
+
+    final url = Uri.parse(
+      'https://maps.googleapis.com/maps/api/place/nearbysearch/json'
+      '?location=${location.latitude},${location.longitude}'
+      '&radius=1500'
+      '&keyword=market'
+      '&key=$apiKey',
+    );
+
+    final response = await http.get(url);
+    final data = json.decode(response.body);
+
+    if (data['status'] == 'OK') {
+      final List results = data['results'];
+      return results.map((place) {
+        final lat = place['geometry']['location']['lat'];
+        final lng = place['geometry']['location']['lng'];
+        final name = place['name'];
+        return Marker(
+          markerId: MarkerId(name),
+          position: LatLng(lat, lng),
+          infoWindow: InfoWindow(title: name),
+          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+        );
+      }).toList();
+    } else {
+      print('Places API failed: ${data['status']}');
+      return [];
+    }
+  }
+
   Future<void> _showGoogleMapDialog(BuildContext context) async {
     LocationPermission permission = await Geolocator.requestPermission();
     if (permission == LocationPermission.denied ||
@@ -63,31 +107,30 @@ class _ProductInfoScreenState extends State<ProductInfoScreen>
     Position position = await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.high,
     );
-    setState(() {
-      _userLocation = LatLng(position.latitude, position.longitude);
-    });
+    LatLng userLoc = LatLng(position.latitude, position.longitude);
+
+    final userMarker = Marker(
+      markerId: const MarkerId("user_location"),
+      position: userLoc,
+      infoWindow: const InfoWindow(title: "You"),
+    );
+
+    final marketMarkers = await fetchNearbyMarketsFromPlacesAPI(userLoc);
 
     showDialog(
       context: context,
       builder:
-          (context) => AlertDialog(
+          (_) => AlertDialog(
             content: SizedBox(
-              width: MediaQuery.of(context).size.width * 0.8,
+              width: MediaQuery.of(context).size.width * 0.9,
               height: MediaQuery.of(context).size.height * 0.6,
               child: GoogleMap(
                 initialCameraPosition: CameraPosition(
-                  target: _userLocation!,
+                  target: userLoc,
                   zoom: 15,
                 ),
                 myLocationEnabled: true,
-                myLocationButtonEnabled: true,
-                markers: {
-                  Marker(
-                    markerId: MarkerId("user_location"),
-                    position: _userLocation!,
-                    infoWindow: InfoWindow(title: "Your Location"),
-                  ),
-                },
+                markers: {userMarker, ...marketMarkers},
                 onMapCreated: (controller) => _mapController = controller,
               ),
             ),
@@ -201,11 +244,26 @@ class _ProductInfoScreenState extends State<ProductInfoScreen>
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: ElevatedButton.icon(
-                        onPressed: () => _showGoogleMapDialog(context),
-                        icon: const Icon(Icons.map),
-                        label: const Text('Haritada Marketleri Göster'),
-                      ),
+                      child:
+                          _isLoggedIn
+                              ? ElevatedButton.icon(
+                                onPressed: () => _showGoogleMapDialog(context),
+                                icon: const Icon(Icons.map),
+                                label: const Text('Haritada Marketleri Göster'),
+                              )
+                              : ElevatedButton.icon(
+                                onPressed: () {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        'Lütfen harita özelliğini kullanmak için giriş yapınız.',
+                                      ),
+                                    ),
+                                  );
+                                },
+                                icon: const Icon(Icons.lock),
+                                label: const Text('Haritada Marketleri Göster'),
+                              ),
                     ),
                     TabBar(
                       controller: _tabController,
