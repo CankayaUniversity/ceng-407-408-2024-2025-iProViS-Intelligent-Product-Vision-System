@@ -5,8 +5,7 @@ class MongoService {
   factory MongoService() => _instance;
   MongoService._internal();
 
-  final String _connectionString = 
-    'mongodb://10.0.2.2:27017/iprovis';
+  final String _connectionString = 'mongodb://10.0.2.2:27017/iprovis';
   Db? _db;
   bool _isConnecting = false;
 
@@ -95,7 +94,7 @@ class MongoService {
       final collection = db.collection('users');
       final user = await collection.findOne({
         'email': email,
-        'password': password
+        'password': password,
       });
       return user != null;
     } catch (e) {
@@ -111,7 +110,7 @@ class MongoService {
 
     try {
       final users = _db!.collection('users');
-      
+
       // Check if user already exists
       final existingUser = await users.findOne({'email': email});
       if (existingUser != null) {
@@ -125,7 +124,7 @@ class MongoService {
         'password': password,
         'createdAt': DateTime.now(),
       });
-      
+
       print('User registered successfully');
       return true;
     } catch (e) {
