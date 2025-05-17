@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:iprovis/screens/product_info_screen.dart';
+import 'dart:convert';
 
 class ProfileScreen extends StatefulWidget {
   final String email;
@@ -22,16 +23,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _email = widget.email;
   }
 
-  Future<List<String>> _loadSavedProducts() async {
+  Future<List<Map<String, String>>> _loadSavedProducts() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getStringList('savedProducts_${_email ?? ""}') ?? [];
+    final rawList = prefs.getStringList('savedProducts_${_email ?? ""}') ?? [];
+    return rawList
+        .map((e) => Map<String, String>.from(json.decode(e)))
+        .toList();
   }
 
-  Future<void> _removeSavedProduct(String product) async {
+  Future<void> _removeSavedProduct(Map<String, String> product) async {
     final prefs = await SharedPreferences.getInstance();
     List<String> saved =
         prefs.getStringList('savedProducts_${_email ?? ""}') ?? [];
-    saved.remove(product);
+    saved.removeWhere((item) => item == json.encode(product));
     await prefs.setStringList('savedProducts_${_email ?? ""}', saved);
     setState(() {});
   }
@@ -132,7 +136,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               style: Theme.of(context).textTheme.headlineSmall,
             ),
             const SizedBox(height: 10),
-            FutureBuilder<List<String>>(
+            FutureBuilder<List<Map<String, String>>>(
               future: _loadSavedProducts(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -141,13 +145,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children:
-                      snapshot.data!.map((label) {
+                      snapshot.data!.map((product) {
                         return Card(
                           child: ListTile(
-                            title: Text(label),
+                            title: Text(product['keyword'] ?? ''),
                             trailing: IconButton(
                               icon: const Icon(Icons.delete),
-                              onPressed: () => _removeSavedProduct(label),
+                              onPressed: () => _removeSavedProduct(product),
                             ),
                             onTap: () {
                               Navigator.push(
@@ -155,8 +159,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 MaterialPageRoute(
                                   builder:
                                       (_) => ProductInfoScreen(
-                                        keyword: label,
-                                        imagePath: '',
+                                        keyword: product['keyword'] ?? '',
+                                        imagePath: product['imagePath'] ?? '',
                                       ),
                                 ),
                               );
