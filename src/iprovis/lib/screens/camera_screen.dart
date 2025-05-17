@@ -111,22 +111,39 @@ class _CameraPageState extends State<CameraPage> {
           }
         },
       ),
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
+      floatingActionButton: Stack(
         children: [
-          FloatingActionButton(
-            onPressed: _isCameraReady ? _takePhoto : null,
-            tooltip: 'take_photo'.tr(),
-            child: const Icon(Icons.camera),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 50.0, bottom: 140.0),
+              child: SizedBox(
+                width: 80, // Butonun genişliği
+                height: 80, // Butonun yüksekliği
+                child: FloatingActionButton(
+                  onPressed: _isCameraReady ? _takePhoto : null,
+                  tooltip: 'take_photo'.tr(),
+                  child: const Icon(Icons.camera_alt, size: 40), // İkon boyutu
+
+                  shape: const CircleBorder(), // Buton şekli
+                ),
+              ),
+            ),
           ),
-          const SizedBox(height: 10),
-          FloatingActionButton(
-            onPressed: _pickImageFromGallery,
-            tooltip: 'select_from_gallery'.tr(),
-            child: const Icon(Icons.photo),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: Padding(
+              padding: const EdgeInsets.only(right: 20.0, bottom: 20.0),
+              child: FloatingActionButton(
+                onPressed: _pickImageFromGallery,
+                tooltip: 'select_from_gallery'.tr(),
+                child: const Icon(Icons.photo_library),
+              ),
+            ),
           ),
         ],
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }
