@@ -9,6 +9,7 @@ import 'screens/unknown_route_page.dart';
 import 'themes/app_theme.dart';
 import 'package:iprovis/screens/camera_screen.dart';
 import 'package:flutter/material.dart'; // Import if not already imported
+import 'screens/splash_screen.dart'; // Import SplashScreen
 
 class ProfileScreen extends StatelessWidget {
   @override
@@ -61,8 +62,9 @@ class MyApp extends StatelessWidget {
             localizationsDelegates: context.localizationDelegates,
             supportedLocales: context.supportedLocales,
             locale: context.locale,
-            initialRoute: '/home',
+            initialRoute: '/', // Set initial route to SplashScreen
             routes: {
+              '/': (context) => SplashScreen(), // Define SplashScreen route
               '/home': (context) => HomeScreen(), // Örnek olarak HomeScreen
               '/profile': (context) => ProfileScreen(), // Profil sayfası
               '/camera_screen': (context) => CameraPage(), // Camera sayfası

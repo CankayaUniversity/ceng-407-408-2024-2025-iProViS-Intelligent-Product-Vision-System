@@ -35,5 +35,12 @@
   "logout": "Cerrar Sesión",
   "unknown_route": "Ruta Desconocida",
   "unknown_route_message": "La página que estás buscando no existe.",
-  "description": "Toma una foto del producto para comparar precios y ver los detalles del contenido"
+  "description": "Toma una foto del producto para comparar precios y ver los detalles del contenido",
+  "saved_products": "Productos guardados",
+  "dark_mode": "Modo Oscuro",
+  "recycling": "Reciclaje",
+  "Material": "Material",
+  "Recyclability Rate - Plastic": "Tasa de reciclabilidad - Plástico",
+  "Recyclability Rate - Cardboard": "Tasa de reciclabilidad - Cartón",
+  "Instructions": "Instrucciones"
 }

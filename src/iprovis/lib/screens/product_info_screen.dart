@@ -35,7 +35,7 @@ class _ProductInfoScreenState extends State<ProductInfoScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
     _fetchProductInfo();
     _checkLoginStatus();
   }
@@ -272,6 +272,59 @@ class _ProductInfoScreenState extends State<ProductInfoScreen>
     );
   }
 
+  Widget _buildRecyclingInfoTab() {
+    if (_productInfo == null || _productInfo!['recyclingInfo'] == null) {
+      return const Center(
+        child: Text('Geri dönüşüm bilgisi bulunmamaktadır.'),
+      ); // "Recycling information not available"
+    }
+
+    Map<String, dynamic> recyclingInfo =
+        _productInfo!['recyclingInfo'] as Map<String, dynamic>;
+
+    return ListView(
+      padding: const EdgeInsets.all(8.0),
+      children: [
+        Card(
+          elevation: 2,
+          child: ListTile(
+            title: Text('Material'.tr()), //"Material"
+            trailing: Text(recyclingInfo['material'] ?? 'N/A'),
+          ),
+        ),
+        Card(
+          elevation: 2,
+          child: ListTile(
+            title: Text('Recyclability Rate - Plastic'.tr()),
+            trailing: Text(
+              (recyclingInfo['recyclabilityRate']?['Plastik']?.toString() ??
+                      'N/A') +
+                  '%',
+            ),
+          ),
+        ),
+        Card(
+          elevation: 2,
+          child: ListTile(
+            title: Text('Recyclability Rate - Cardboard'.tr()),
+            trailing: Text(
+              (recyclingInfo['recyclabilityRate']?['Karton']?.toString() ??
+                      'N/A') +
+                  '%',
+            ),
+          ),
+        ),
+        Card(
+          elevation: 2,
+          child: ListTile(
+            title: Text('Instructions'.tr()),
+            subtitle: Text(recyclingInfo['instructions'] ?? 'N/A'),
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -347,7 +400,7 @@ class _ProductInfoScreenState extends State<ProductInfoScreen>
                                   await SharedPreferences.getInstance();
                               final email = _userEmail ?? '';
                               List<String> saved =
-                                  prefs.getStringList('savedProducts_$email') ??
+                                  prefs.getStringList('savedProducts$email') ??
                                   [];
                               Map<String, String> product = {
                                 'keyword': widget.keyword,
@@ -375,6 +428,7 @@ class _ProductInfoScreenState extends State<ProductInfoScreen>
                         Tab(text: 'prices'.tr()),
                         Tab(text: 'nutrition'.tr()),
                         Tab(text: 'ingredients'.tr()),
+                        Tab(text: 'recycling'.tr()), // Added Recycling Tab
                       ],
                     ),
                     Expanded(
@@ -384,6 +438,7 @@ class _ProductInfoScreenState extends State<ProductInfoScreen>
                           _buildPricesTab(),
                           _buildNutritionInfoTab(),
                           _buildIngredientsTab(),
+                          _buildRecyclingInfoTab(), // Added Recycling Tab View
                         ],
                       ),
                     ),

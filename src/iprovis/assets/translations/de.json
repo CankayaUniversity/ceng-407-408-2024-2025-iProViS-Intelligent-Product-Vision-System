@@ -35,5 +35,12 @@
   "logout": "Abmelden",
   "unknown_route": "Unbekannte Route",
   "unknown_route_message": "Die Seite, die du suchst, existiert nicht.",
-  "description": "Machen Sie ein Foto des Produkts, um Preise zu vergleichen und Inhaltsstoffe anzuzeigen"
+  "description": "Machen Sie ein Foto des Produkts, um Preise zu vergleichen und Inhaltsstoffe anzuzeigen",
+  "saved_products": "Gespeicherte Produkte",
+  "dark_mode": "Dunkler Modus",
+  "recycling": "Recycling",
+  "Material": "Material",
+  "Recyclability Rate - Plastic": "Recyclingrate - Plastik",
+  "Recyclability Rate - Cardboard": "Recyclingrate - Karton",
+  "Instructions": "Anweisungen"
 }

@@ -35,5 +35,12 @@
   "logout": "Logout",
   "unknown_route": "Unknown Route",
   "unknown_route_message": "The page you are looking for does not exist.",
-  "description": "Capture a photo of the product to compare prices and view ingredient details"
+  "description": "Capture a photo of the product to compare prices and view ingredient details",
+  "saved_products": "Saved Products",
+  "dark_mode": "Dark Mode",
+  "recycling": "Recycling",
+  "Material": "Material",
+  "Recyclability Rate - Plastic": "Recyclability Rate - Plastic",
+  "Recyclability Rate - Cardboard": "Recyclability Rate - Cardboard",
+  "Instructions": "Instructions"
 }

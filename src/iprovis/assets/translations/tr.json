@@ -35,5 +35,12 @@
   "logout": "Çıkış Yap",
   "unknown_route": "Bilinmeyen Sayfa",
   "unknown_route_message": "Aradığınız sayfa mevcut değil.",
-  "description": "Ürünün fotoğrafını çekerek fiyat karşılaştırması ve içerik bilgilerini görüntüleyin"
+  "description": "Ürünün fotoğrafını çekerek fiyat karşılaştırması ve içerik bilgilerini görüntüleyin",
+  "saved_products": "Kaydedilen Ürünler",
+  "dark_mode": "Karanlık Mod",
+  "recycling": "Geri Dönüşüm",
+  "Material": "Materyal",
+  "Recyclability Rate - Plastic": "Geri Dönüştürülebilirlik Oranı - Plastik",
+  "Recyclability Rate - Cardboard": "Geri Dönüştürülebilirlik Oranı - Karton",
+  "Instructions": "Talimatlar"
 }
