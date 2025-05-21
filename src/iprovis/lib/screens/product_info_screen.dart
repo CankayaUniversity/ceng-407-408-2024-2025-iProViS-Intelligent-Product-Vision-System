@@ -400,7 +400,7 @@ class _ProductInfoScreenState extends State<ProductInfoScreen>
                                   await SharedPreferences.getInstance();
                               final email = _userEmail ?? '';
                               List<String> saved =
-                                  prefs.getStringList('savedProducts$email') ??
+                                  prefs.getStringList('savedProducts_$email') ??
                                   [];
                               Map<String, String> product = {
                                 'keyword': widget.keyword,
