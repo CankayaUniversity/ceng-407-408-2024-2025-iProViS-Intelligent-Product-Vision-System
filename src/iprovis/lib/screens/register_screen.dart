@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../services/mongo_service.dart';
-import 'profile_screen.dart';
 import 'home_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
 
