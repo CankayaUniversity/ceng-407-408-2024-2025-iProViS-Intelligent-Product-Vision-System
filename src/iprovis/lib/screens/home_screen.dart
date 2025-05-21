@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/services.dart'; 
 import 'camera_screen.dart';
 import 'login_screen.dart';
 import 'register_screen.dart';
 import 'profile_screen.dart';
+import 'dart:ui';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen>
-    with SingleTickerProviderStateMixin {
+class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
   bool _isLoggedIn = false;
@@ -41,82 +42,45 @@ class _HomeScreenState extends State<HomeScreen>
 
   Future<void> _checkLoginStatus() async {
     final prefs = await SharedPreferences.getInstance();
+    if (!mounted) return; // Check if the widget is still mounted before calling setState
     setState(() {
       _isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
     });
   }
 
-  Widget _buildAnimatedButton({
-    required VoidCallback onPressed,
-    required IconData icon,
-    required String label,
-    required Color backgroundColor,
-    required Color foregroundColor,
-  }) {
-    return GestureDetector(
-      onTapDown: (_) => _controller.forward(),
-      onTapUp: (_) {
-        _controller.reverse();
-        onPressed();
-      },
-      onTapCancel: () => _controller.reverse(),
-      child: ScaleTransition(
-        scale: _scaleAnimation,
-        child: Container(
-          decoration: BoxDecoration(
-            color: backgroundColor,
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: backgroundColor.withOpacity(0.3),
-                blurRadius: 8,
-                offset: const Offset(0, 4),
-              ),
-            ],
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(icon, color: foregroundColor),
-                const SizedBox(width: 8),
-                Text(
-                  label,
-                  style: TextStyle(
-                    color: foregroundColor,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
-      backgroundColor: colorScheme.background,
+      extendBodyBehindAppBar: true,
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
-        title: Image.asset(
-          'assets/images/logo.png',
-          height: 64,
-          fit: BoxFit.contain,
+        backgroundColor: Theme.of(context).brightness == Brightness.dark
+            ? const Color(0xFF111111)
+            : Colors.white,
+        elevation: 0,
+        title: Text(
+          'iProViS',
+          style: TextStyle(
+            color: Theme.of(context).brightness == Brightness.dark
+                ? Colors.white
+                : Colors.black,
+            fontWeight: FontWeight.bold,
+            fontSize: 28,
+            letterSpacing: 2,
+          ),
         ),
         centerTitle: true,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
         actions: [
           DropdownButton<Locale>(
             underline: const SizedBox(),
-            icon: const Icon(Icons.language, color: Colors.white),
+            icon: Icon(
+              Icons.language,
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? Colors.white
+                  : Colors.black,
+            ),
             onChanged: (Locale? locale) {
               if (locale != null) {
                 context.setLocale(locale);
@@ -132,11 +96,16 @@ class _HomeScreenState extends State<HomeScreen>
           ),
           if (_isLoggedIn)
             IconButton(
-              icon: const Icon(Icons.person_outline, size: 28),
+              icon: Icon(
+                Icons.person_outline,
+                size: 28,
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.white
+                    : Colors.black,
+              ),
               onPressed: () async {
                 final prefs = await SharedPreferences.getInstance();
-                final email =
-                    prefs.getString('email') ?? 'kullanici@example.com';
+                final email = prefs.getString('email') ?? 'kullanici@example.com';
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -148,87 +117,191 @@ class _HomeScreenState extends State<HomeScreen>
           const SizedBox(width: 8),
         ],
       ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(24.0),
-                decoration: BoxDecoration(
-                  color: colorScheme.surface,
-                  borderRadius: BorderRadius.circular(16),
-                ),
+      body: Stack(
+        children: [
+          // Gradient arka plan
+          Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Color(0xFF2196F3), Color(0xFF64B5F6)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+          ),
+          // Blur efekti
+          BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+            child: Container(
+              color: Colors.black.withAlpha((255 * 0.05).toInt()), // Updated opacity
+            ),
+          ),
+          Center(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),
                 child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Text(
-                      'start_scanning'.tr(),
-                      style: textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
+                    // Glassmorphism kart
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white.withAlpha((255 * 0.35).toInt()), // Updated opacity
+                        borderRadius: BorderRadius.circular(24),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withAlpha((255 * 0.12).toInt()), // Updated opacity
+                            blurRadius: 24,
+                            offset: Offset(0, 8),
+                          ),
+                        ],
+                        border: Border.all(
+                          color: Colors.white.withAlpha((255 * 0.5).toInt()), // Updated opacity
+                          width: 1.5,
+                        ),
                       ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      'description'.tr(),
-                      style: textTheme.bodyLarge?.copyWith(
-                        color: colorScheme.onSurface.withOpacity(0.7),
+                      child: Padding(
+                        padding: const EdgeInsets.all(32.0),
+                        child: Column(
+                          children: [
+                            Text(
+                              'start_scanning'.tr(),
+                              style: textTheme.headlineSmall?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                fontSize: 24,
+                                letterSpacing: 1.2,
+                                shadows: [Shadow(color: Colors.black.withAlpha((255 * 0.25).toInt()), blurRadius: 4)],
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: 18),
+                            Text(
+                              'description'.tr(),
+                              style: textTheme.bodyLarge?.copyWith(
+                                color: Colors.white,
+                                fontSize: 16,
+                                shadows: [Shadow(color: Colors.black.withAlpha((255 * 0.18).toInt()), blurRadius: 3)],
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
                       ),
-                      textAlign: TextAlign.center,
                     ),
+                    const SizedBox(height: 48),
+                    // Kamera butonu
+                    Center(
+                      child: GestureDetector(
+                        onTapDown: (_) {
+                          _controller.forward();
+                          HapticFeedback.lightImpact();
+                        },
+                        onTapUp: (_) {
+                          _controller.reverse();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => CameraPage()),
+                          );
+                        },
+                        onTapCancel: () => _controller.reverse(),
+                        child: ScaleTransition(
+                          scale: _scaleAnimation,
+                          child: Container(
+                            width: 90,
+                            height: 90,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              gradient: LinearGradient(
+                                colors: [Color.fromARGB(255, 79, 176, 255), Color(0xFF1565C0)],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Color.fromARGB(255, 4, 75, 156).withAlpha((255 * 0.4).toInt()), // Updated opacity
+                                  blurRadius: 18,
+                                  offset: Offset(0, 8),
+                                ),
+                              ],
+                            ),
+                            child: Center(
+                              child: Icon(Icons.camera_alt, color: Colors.white, size: 44, shadows: [Shadow(color: Colors.black.withAlpha((255 * 0.25).toInt()), blurRadius: 4)]),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 32),
+                    if (!_isLoggedIn)
+                      Column(
+                        children: [
+                          // Login butonu
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton.icon(
+                              icon: Icon(Icons.login, color: Colors.white),
+                              label: Text('login'.tr()),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Color(0xFF1565C0),
+                                foregroundColor: Colors.white,
+                                shadowColor: Colors.black.withAlpha((255 * 0.25).toInt()), // Updated opacity
+                                elevation: 2,
+                                padding: const EdgeInsets.symmetric(vertical: 18),
+                                textStyle: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.white, shadows: [Shadow(color: Colors.black, blurRadius: 2)]),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                  side: BorderSide(color: Colors.white.withAlpha((255 * 0.7).toInt()), width: 1.2), // Updated opacity
+                                ),
+                              ),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => LoginScreen(),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          // Register butonu
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton.icon(
+                              icon: Icon(Icons.person_add_alt_1, color: Colors.white),
+                              label: Text('register'.tr()),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Color(0xFF1565C0),
+                                foregroundColor: Colors.white,
+                                shadowColor: Colors.black.withAlpha((255 * 0.25).toInt()), // Updated opacity
+                                elevation: 2,
+                                padding: const EdgeInsets.symmetric(vertical: 18),
+                                textStyle: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.white, shadows: [Shadow(color: Colors.black, blurRadius: 2)]),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                  side: BorderSide(color: Colors.white.withAlpha((255 * 0.7).toInt()), width: 1.2), // Updated opacity
+                                ),
+                              ),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => RegisterScreen(),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
                   ],
                 ),
               ),
-              const SizedBox(height: 40),
-              _buildAnimatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => CameraPage()),
-                  );
-                },
-                icon: Icons.camera_alt,
-                label: 'take_photo'.tr(),
-                backgroundColor: colorScheme.primary,
-                foregroundColor: colorScheme.onPrimary,
-              ),
-              if (!_isLoggedIn)
-                Padding(
-                  padding: const EdgeInsets.only(top: 16.0),
-                  child: Column(
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => LoginScreen(),
-                            ),
-                          );
-                        },
-                        child: Text('login'.tr()),
-                      ),
-                      const SizedBox(height: 8),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => RegisterScreen(),
-                            ),
-                          );
-                        },
-                        child: Text('register'.tr()),
-                      ),
-                    ],
-                  ),
-                ),
-              const SizedBox(height: 16),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
