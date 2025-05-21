@@ -1,4 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Permissions -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -9,12 +10,13 @@
     <application 
         android:label="iprovis"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"> <!-- Ensure this is pointing to the correct icon -->
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBJS4mhiK-84DcJmS6VILYR50QkExbewx0" />
 
+        <!-- Main Activity Configuration -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -36,15 +38,18 @@
             </intent-filter>
         </activity>
 
+        <!-- Metadata for Flutter -->
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
     </application>
 
+    <!-- Optional: Queries for specific features -->
     <queries>
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>
         </intent>
     </queries>
+
 </manifest>
