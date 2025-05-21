@@ -103,7 +103,14 @@ class MongoService {
     }
   }
 
-  Future<bool> registerUser(String email, String password) async {
+  Future<bool> registerUser(
+    String email,
+    String password,
+    String name,
+    String surname,
+    String birthDate,
+    String phoneNumber,
+  ) async {
     if (_db == null || _db!.state != State.OPEN) {
       await connect();
     }
@@ -122,6 +129,10 @@ class MongoService {
       await users.insertOne({
         'email': email,
         'password': password,
+        'name': name,
+        'surname': surname,
+        'birthDate': birthDate,
+        'phoneNumber': phoneNumber,
         'createdAt': DateTime.now(),
       });
 
@@ -130,6 +141,18 @@ class MongoService {
     } catch (e) {
       print('Registration error: $e');
       return false;
+    }
+  }
+
+  Future<Map<String, dynamic>?> getUserByEmail(String email) async {
+    try {
+      final db = await _getDb();
+      final collection = db.collection('users');
+      final user = await collection.findOne({'email': email});
+      return user;
+    } catch (e) {
+      print('Error fetching user by email: $e');
+      return null;
     }
   }
 

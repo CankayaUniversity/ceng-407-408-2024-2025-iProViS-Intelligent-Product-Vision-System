@@ -42,5 +42,13 @@
   "Material": "Materyal",
   "Recyclability Rate - Plastic": "Geri Dönüştürülebilirlik Oranı - Plastik",
   "Recyclability Rate - Cardboard": "Geri Dönüştürülebilirlik Oranı - Karton",
-  "Instructions": "Talimatlar"
+  "Instructions": "Talimatlar",
+  "name": "Ad",
+  "surname": "Soyad",
+  "birth_date": "Doğum Tarihi",
+  "phone_number": "Telefon Numarası",
+  "enter_name": "Lütfen adınızı girin",
+  "enter_surname": "Lütfen soyadınızı girin",
+  "enter_birth_date": "Lütfen doğum tarihinizi girin",
+  "enter_phone_number": "Lütfen telefon numaranızı girin"
 }

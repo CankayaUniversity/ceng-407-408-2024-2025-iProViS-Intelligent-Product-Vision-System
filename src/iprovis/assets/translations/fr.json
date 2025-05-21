@@ -42,5 +42,13 @@
   "Material": "Matériel",
   "Recyclability Rate - Plastic": "Taux de recyclabilité - Plastique",
   "Recyclability Rate - Cardboard": "Taux de recyclabilité - Carton",
-  "Instructions": "Instructions"
+  "Instructions": "Instructions",
+  "name": "Nom",
+  "surname": "Prénom",
+  "birth_date": "Date de naissance",
+  "phone_number": "Numéro de téléphone",
+  "enter_name": "Veuillez entrer votre nom",
+  "enter_surname": "Veuillez entrer votre prénom",
+  "enter_birth_date": "Veuillez entrer votre date de naissance",
+  "enter_phone_number": "Veuillez entrer votre numéro de téléphone"
 }
