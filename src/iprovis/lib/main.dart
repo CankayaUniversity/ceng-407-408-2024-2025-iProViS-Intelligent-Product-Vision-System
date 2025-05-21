@@ -8,7 +8,6 @@ import 'screens/home_screen.dart';
 import 'screens/unknown_route_page.dart';
 import 'themes/app_theme.dart';
 import 'package:iprovis/screens/camera_screen.dart';
-import 'package:flutter/material.dart'; // Import if not already imported
 import 'screens/splash_screen.dart'; // Import SplashScreen
 
 class ProfileScreen extends StatelessWidget {
