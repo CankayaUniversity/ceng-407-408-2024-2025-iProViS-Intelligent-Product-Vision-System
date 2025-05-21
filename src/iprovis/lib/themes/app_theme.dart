@@ -4,9 +4,9 @@ class AppTheme {
   static ThemeData lightTheme = ThemeData.light().copyWith(
     useMaterial3: true,
     colorScheme: ColorScheme.light(
-      primary: const Color(0xFF6750A4),
-      secondary: const Color(0xFF03DAC6),
-      surface: const Color(0xFFF0F0F0),
+      primary: const Color(0xFF2196F3),
+      secondary: const Color(0xFF64B5F6),
+      surface: const Color(0xFFFFFFFF),
       background: const Color(0xFFF5F5F5),
       error: const Color(0xFFB00020),
     ),
@@ -15,8 +15,8 @@ class AppTheme {
   static ThemeData darkTheme = ThemeData.dark().copyWith(
     useMaterial3: true,
     colorScheme: ColorScheme.dark(
-      primary: const Color(0xFF6750A4),
-      secondary: const Color(0xFF03DAC6),
+      primary: const Color(0xFF2196F3),
+      secondary: const Color(0xFF64B5F6),
       surface: const Color(0xFF1E1E1E),
       background: const Color(0xFF121212),
       error: const Color(0xFFCF6679),
@@ -31,7 +31,7 @@ class AppTheme {
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         elevation: 0,
-        backgroundColor: const Color(0xFF6750A4),
+        backgroundColor: const Color(0xFF2196F3),
         foregroundColor: Colors.white,
         padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
         shape: RoundedRectangleBorder(
@@ -42,7 +42,7 @@ class AppTheme {
     filledButtonTheme: FilledButtonThemeData(
       style: FilledButton.styleFrom(
         elevation: 0,
-        backgroundColor: const Color(0xFF6750A4),
+        backgroundColor: const Color(0xFF2196F3),
         foregroundColor: Colors.white,
         padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
         shape: RoundedRectangleBorder(
@@ -52,8 +52,8 @@ class AppTheme {
     ),
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
-        foregroundColor: const Color(0xFF6750A4),
-        side: const BorderSide(color: Color(0xFF6750A4)),
+        foregroundColor: const Color(0xFF2196F3),
+        side: const BorderSide(color: Color(0xFF2196F3)),
         padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
