@@ -27,7 +27,6 @@ class _ProductInfoScreenState extends State<ProductInfoScreen>
   final MongoService _mongoService = MongoService();
   Map<String, dynamic>? _productInfo;
   late TabController _tabController;
-  LatLng? _userLocation;
   GoogleMapController? _mapController;
   bool _isLoggedIn = false;
   String? _userEmail;
