@@ -119,21 +119,93 @@ class _ProductInfoScreenState extends State<ProductInfoScreen>
 
     final marketMarkers = await fetchNearbyMarketsFromPlacesAPI(userLoc);
 
+    // Extract market information for the list
+    final marketList =
+        marketMarkers.map((marker) {
+          double distance = Geolocator.distanceBetween(
+            userLoc.latitude,
+            userLoc.longitude,
+            marker.position.latitude,
+            marker.position.longitude,
+          );
+          return {
+            'name': marker.infoWindow.title ?? '',
+            'distance': distance,
+            'marker': marker, // Store the marker itself
+          };
+        }).toList();
+
+    // Sort by distance
+    marketList.sort(
+      (a, b) => (a['distance'] as double).compareTo(b['distance'] as double),
+    );
+
+    // Added variable to hold the selected market's position
+    LatLng? selectedMarketPosition;
+
     showDialog(
       context: context,
       builder:
           (_) => AlertDialog(
             content: SizedBox(
               width: MediaQuery.of(context).size.width * 0.9,
-              height: MediaQuery.of(context).size.height * 0.6,
-              child: GoogleMap(
-                initialCameraPosition: CameraPosition(
-                  target: userLoc,
-                  zoom: 15,
-                ),
-                myLocationEnabled: true,
-                markers: {userMarker, ...marketMarkers},
-                onMapCreated: (controller) => _mapController = controller,
+              height: MediaQuery.of(context).size.height * 0.7,
+              child: Column(
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: GoogleMap(
+                      initialCameraPosition: CameraPosition(
+                        target: userLoc,
+                        zoom: 15,
+                      ),
+                      myLocationEnabled: true,
+                      markers: {userMarker, ...marketMarkers},
+                      onMapCreated: (controller) {
+                        _mapController = controller;
+                        // Animate to the first market if available
+                        if (marketList.isNotEmpty) {
+                          _mapController?.animateCamera(
+                            CameraUpdate.newLatLng(
+                              (marketList.first['marker'] as Marker).position,
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Expanded(
+                    flex: 1,
+                    child: ListView.builder(
+                      itemCount: marketList.length,
+                      itemBuilder: (context, index) {
+                        final market = marketList[index];
+                        final distance =
+                            (market['distance'] as num?)?.toDouble() ??
+                            0.0 / 1000.0; // in km
+                        final formattedDistance =
+                            distance < 1
+                                ? '${(distance * 1000).toStringAsFixed(0)} m'
+                                : '${distance.toStringAsFixed(1)} km';
+
+                        return ListTile(
+                          leading: const Icon(Icons.store),
+                          title: Text(market['name'].toString()),
+                          trailing: Text(formattedDistance),
+                          onTap: () {
+                            // When a market is tapped, update the camera position
+                            selectedMarketPosition =
+                                (market['marker'] as Marker).position;
+                            _mapController?.animateCamera(
+                              CameraUpdate.newLatLng(selectedMarketPosition!),
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
             actions: [
