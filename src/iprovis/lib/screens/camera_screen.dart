@@ -116,7 +116,7 @@ class _CameraPageState extends State<CameraPage> {
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
-              padding: const EdgeInsets.only(left: 50.0, bottom: 140.0),
+              padding: const EdgeInsets.only(left: 50.0, bottom: 20.0),
               child: SizedBox(
                 width: 80, // Butonun genişliği
                 height: 80, // Butonun yüksekliği
