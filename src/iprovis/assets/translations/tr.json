@@ -37,6 +37,7 @@
   "unknown_route_message": "Aradığınız sayfa mevcut değil.",
   "description": "Ürünün fotoğrafını çekerek fiyat karşılaştırması ve içerik bilgilerini görüntüleyin",
   "saved_products": "Kaydedilen Ürünler",
+  "no_saved_products": "Kaydedilen ürün yok.",
   "dark_mode": "Karanlık Mod",
   "recycling": "Geri Dönüşüm",
   "Material": "Materyal",

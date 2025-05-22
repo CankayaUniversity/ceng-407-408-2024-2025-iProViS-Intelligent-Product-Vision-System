@@ -37,6 +37,7 @@
   "unknown_route_message": "The page you are looking for does not exist.",
   "description": "Capture a photo of the product to compare prices and view ingredient details",
   "saved_products": "Saved Products",
+  "no_saved_products": "No saved products.",
   "dark_mode": "Dark Mode",
   "recycling": "Recycling",
   "Material": "Material",

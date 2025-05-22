@@ -59,10 +59,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
         prefs.getStringList('savedProducts_${_userInfo?['email'] ?? ""}') ?? [];
     saved.removeWhere((item) => item == json.encode(product));
     await prefs.setStringList(
-      'savedProducts${_userInfo?['email'] ?? ""}',
+      'savedProducts_${_userInfo?['email'] ?? ""}',
       saved,
     );
-    setState(() {});
+    setState(() {}); // Update the UI after removing the product
   }
 
   @override
@@ -131,7 +131,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     const SizedBox(height: 20),
                     Text(
-                      'Kaydedilen Ürünler',
+                      'saved_products'
+                          .tr(), // Localized key for "Kaydedilen Ürünler"
                       style: Theme.of(context).textTheme.headlineSmall,
                     ),
                     const SizedBox(height: 10),
@@ -139,7 +140,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       future: loadSavedProducts(),
                       builder: (context, snapshot) {
                         if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                          return Text('Kaydedilen ürün yok.');
+                          return Text(
+                            'no_saved_products'.tr(),
+                          ); // Localized key for "Kaydedilen ürün yok."
                         }
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -195,7 +198,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Center(
                       child: ElevatedButton(
                         onPressed: () async {
-                          Navigator.pushReplacementNamed(context, '/home');
+                          final prefs = await SharedPreferences.getInstance();
+                          await prefs.clear(); // Clear all saved preferences
+                          if (!mounted) return;
+                          Navigator.pushReplacementNamed(
+                            context,
+                            '/home',
+                          ); // Navigate to home screen
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Theme.of(context).colorScheme.error,
