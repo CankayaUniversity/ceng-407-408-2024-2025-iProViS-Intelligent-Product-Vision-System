@@ -17,7 +17,7 @@
   "login_success": "Connexion réussie !",
   "login_error": "E-mail ou mot de passe incorrect",
   "general_error": "Une erreur s'est produite : {error}",
-  "registration_success": "Inscription réussie ! Vous pouvez maintenant vous connecter.",
+  "register_success": "Inscription réussie ! Vous pouvez maintenant vous connecter.",
   "registration_error": "Cet e-mail est déjà enregistré.",
   "product_info": "Informations sur le Produit",
   "prices": "Prix",

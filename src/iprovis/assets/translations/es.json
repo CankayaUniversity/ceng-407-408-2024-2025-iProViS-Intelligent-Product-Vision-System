@@ -17,7 +17,7 @@
   "login_success": "¡Inicio de sesión exitoso!",
   "login_error": "Correo electrónico o contraseña incorrectos",
   "general_error": "Ocurrió un error: {error}",
-  "registration_success": "¡Registro exitoso! Ahora puedes iniciar sesión.",
+  "register_success": "¡Registro exitoso! Ahora puedes iniciar sesión.",
   "registration_error": "Este correo electrónico ya está registrado.",
   "product_info": "Información del Producto",
   "prices": "Precios",

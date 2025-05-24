@@ -2,12 +2,13 @@
 import 'package:flutter/material.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:google_fonts/google_fonts.dart'; // Google Fonts paketi
 import 'screens/login_screen.dart';
 import 'screens/register_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/unknown_route_page.dart';
 import 'themes/app_theme.dart';
-import 'package:iprovis/screens/camera_screen.dart';
+import 'screens/camera_screen.dart';
 import 'screens/splash_screen.dart'; // Import SplashScreen
 
 class ProfileScreen extends StatelessWidget {
@@ -49,8 +50,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AdaptiveTheme(
-      light: AppTheme.lightTheme,
-      dark: AppTheme.darkTheme,
+      light: AppTheme.lightTheme.copyWith(
+        textTheme: GoogleFonts.poppinsTextTheme(AppTheme.lightTheme.textTheme),
+      ),
+      dark: AppTheme.darkTheme.copyWith(
+        textTheme: GoogleFonts.poppinsTextTheme(AppTheme.darkTheme.textTheme),
+      ),
       initial: savedThemeMode ?? AdaptiveThemeMode.dark,
       builder:
           (theme, darkTheme) => MaterialApp(

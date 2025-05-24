@@ -17,7 +17,7 @@
   "login_success": "Login successful!",
   "login_error": "Incorrect email or password",
   "general_error": "An error occurred: {error}",
-  "registration_success": "Registration successful! You can log in.",
+  "register_success": "Registration successful! You can log in.",
   "registration_error": "This email is already registered.",
   "product_info": "Product Info",
   "prices": "Prices",

@@ -21,6 +21,7 @@ dependencies:
   easy_localization: ^3.0.7
   geolocator: ^14.0.0
   google_maps_flutter: ^2.12.2
+  google_fonts: ^5.0.0
 
 dev_dependencies:
   flutter_test:
@@ -34,3 +35,12 @@ flutter:
     - assets/labels.txt
     - assets/images/
     - assets/translations/
+    - assets/fonts/
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Regular.ttf
+        - asset: assets/fonts/Poppins-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Poppins-Italic.ttf
+          style: italic

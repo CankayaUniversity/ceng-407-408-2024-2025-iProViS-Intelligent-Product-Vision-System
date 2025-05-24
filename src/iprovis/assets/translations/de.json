@@ -17,7 +17,7 @@
   "login_success": "Anmeldung erfolgreich!",
   "login_error": "Falsche E-Mail oder Passwort",
   "general_error": "Ein Fehler ist aufgetreten: {error}",
-  "registration_success": "Registrierung erfolgreich! Du kannst dich jetzt anmelden.",
+  "register_success": "Registrierung erfolgreich! Du kannst dich jetzt anmelden.",
   "registration_error": "Diese E-Mail ist bereits registriert.",
   "product_info": "Produktinformationen",
   "prices": "Preise",
