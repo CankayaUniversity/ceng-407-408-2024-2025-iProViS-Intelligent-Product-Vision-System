@@ -51,5 +51,11 @@
   "enter_name": "Por favor, ingrese su nombre",
   "enter_surname": "Por favor, ingrese su apellido",
   "enter_birth_date": "Por favor, ingrese su fecha de nacimiento",
-  "enter_phone_number": "Por favor, ingrese su número de teléfono"
+  "enter_phone_number": "Por favor, ingrese su número de teléfono",
+  "login_required_to_save": "Necesitas iniciar sesión para guardar este producto.",
+  "product_saved": "Producto guardado exitosamente.",
+  "save": "Guardar",
+  "login_required_to_use_map": "Por favor, inicie sesión para usar la función de mapa.",
+  "invalid_phone_number": "El número de teléfono solo debe contener dígitos.",
+  "phone_number_length": "El número de teléfono debe tener entre 10 y 15 caracteres."
 }

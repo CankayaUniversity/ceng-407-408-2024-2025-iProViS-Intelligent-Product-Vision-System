@@ -381,10 +381,10 @@ class _ProductInfoScreenState extends State<ProductInfoScreen>
                                       ScaffoldMessenger.of(
                                         context,
                                       ).showSnackBar(
-                                        const SnackBar(
+                                        SnackBar(
                                           content: Text(
-                                            'Lütfen harita özelliğini kullanmak için giriş yapınız.',
-                                          ),
+                                            'login_required_to_use_map'.tr(),
+                                          ), // Localized message
                                         ),
                                       );
                                     },
@@ -395,6 +395,19 @@ class _ProductInfoScreenState extends State<ProductInfoScreen>
                           IconButton(
                             icon: const Icon(Icons.favorite),
                             onPressed: () async {
+                              if (!_isLoggedIn) {
+                                // Show a message prompting the user to log in
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      'login_required_to_save'.tr(),
+                                    ), // Localized message
+                                  ),
+                                );
+                                return;
+                              }
+
+                              // Save the product if the user is logged in
                               final prefs =
                                   await SharedPreferences.getInstance();
                               final email = _userEmail ?? '';
@@ -411,12 +424,14 @@ class _ProductInfoScreenState extends State<ProductInfoScreen>
                                 saved.toSet().toList(),
                               );
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Ürün kaydedildi.'),
+                                SnackBar(
+                                  content: Text(
+                                    'product_saved'.tr(),
+                                  ), // Localized message
                                 ),
                               );
                             },
-                            tooltip: 'Kaydet',
+                            tooltip: 'save'.tr(), // Localized tooltip
                           ),
                         ],
                       ),

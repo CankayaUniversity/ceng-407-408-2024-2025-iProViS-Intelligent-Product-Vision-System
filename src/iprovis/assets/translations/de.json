@@ -51,5 +51,11 @@
   "enter_name": "Bitte gib deinen Namen ein",
   "enter_surname": "Bitte gib deinen Nachnamen ein",
   "enter_birth_date": "Bitte gib dein Geburtsdatum ein",
-  "enter_phone_number": "Bitte gib deine Telefonnummer ein"
+  "enter_phone_number": "Bitte gib deine Telefonnummer ein",
+  "login_required_to_save": "Sie müssen sich anmelden, um dieses Produkt zu speichern.",
+  "product_saved": "Produkt erfolgreich gespeichert.",
+  "save": "Speichern",
+  "login_required_to_use_map": "Bitte melden Sie sich an, um die Kartenfunktion zu nutzen.",
+  "invalid_phone_number": "Die Telefonnummer darf nur Ziffern enthalten.",
+  "phone_number_length": "Die Telefonnummer muss zwischen 10 und 15 Zeichen lang sein."
 }

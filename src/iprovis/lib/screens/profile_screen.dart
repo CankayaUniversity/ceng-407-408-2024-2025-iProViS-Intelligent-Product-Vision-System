@@ -5,6 +5,7 @@ import 'package:iprovis/services/mongo_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:iprovis/screens/product_info_screen.dart';
+import 'package:iprovis/screens/home_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   final String email;
@@ -199,12 +200,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: ElevatedButton(
                         onPressed: () async {
                           final prefs = await SharedPreferences.getInstance();
-                          await prefs.clear(); // Clear all saved preferences
+                          await prefs.clear(); // Kullanıcı oturumunu temizle
                           if (!mounted) return;
-                          Navigator.pushReplacementNamed(
+                          Navigator.pushAndRemoveUntil(
                             context,
-                            '/home',
-                          ); // Navigate to home screen
+                            MaterialPageRoute(
+                              builder: (context) => const HomeScreen(),
+                            ),
+                            (route) => false, // Tüm önceki rotaları kaldır
+                          );
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Theme.of(context).colorScheme.error,

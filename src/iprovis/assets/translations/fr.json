@@ -51,5 +51,11 @@
   "enter_name": "Veuillez entrer votre nom",
   "enter_surname": "Veuillez entrer votre prénom",
   "enter_birth_date": "Veuillez entrer votre date de naissance",
-  "enter_phone_number": "Veuillez entrer votre numéro de téléphone"
+  "enter_phone_number": "Veuillez entrer votre numéro de téléphone",
+  "login_required_to_save": "Vous devez vous connecter pour enregistrer ce produit.",
+  "login_required_to_use_map": "Veuillez vous connecter pour utiliser la fonction de carte.",
+  "product_saved": "Produit enregistré avec succès.",
+  "save": "Enregistrer",
+  "invalid_phone_number": "Le numéro de téléphone ne doit contenir que des chiffres.",
+  "phone_number_length": "Le numéro de téléphone doit comporter entre 10 et 15 caractères."
 }

@@ -51,5 +51,11 @@
   "enter_name": "Please enter your name",
   "enter_surname": "Please enter your surname",
   "enter_birth_date": "Please enter your birth date",
-  "enter_phone_number": "Please enter your phone number"
+  "enter_phone_number": "Please enter your phone number",
+  "login_required_to_save": "You need to log in to save this product.",
+  "login_required_to_use_map": "Please log in to use the map feature.",
+  "product_saved": "Product saved successfully.",
+  "save": "Save",
+  "invalid_phone_number": "Phone number must contain only digits.",
+  "phone_number_length": "Phone number must be between 10 and 15 characters."
 }

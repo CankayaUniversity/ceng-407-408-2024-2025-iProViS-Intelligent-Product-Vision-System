@@ -52,11 +52,10 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-
     return Scaffold(
-      extendBodyBehindAppBar: true,
       appBar: AppBar(
+        automaticallyImplyLeading:
+            !_isLoggedIn, // Kullanıcı login değilse geri butonunu göster
         backgroundColor:
             Theme.of(context).brightness == Brightness.dark
                 ? const Color(0xFF111111)
@@ -90,13 +89,30 @@ class _HomeScreenState extends State<HomeScreen>
                 context.setLocale(locale);
               }
             },
-            items: const [
-              DropdownMenuItem(value: Locale('en'), child: Text("EN")),
-              DropdownMenuItem(value: Locale('tr'), child: Text("TR")),
-              DropdownMenuItem(value: Locale('es'), child: Text("ES")),
-              DropdownMenuItem(value: Locale('de'), child: Text("DE")),
-              DropdownMenuItem(value: Locale('fr'), child: Text("FR")),
-            ],
+            items:
+                const [
+                  DropdownMenuItem(value: Locale('en'), child: Text("EN")),
+                  DropdownMenuItem(value: Locale('tr'), child: Text("TR")),
+                  DropdownMenuItem(value: Locale('es'), child: Text("ES")),
+                  DropdownMenuItem(value: Locale('de'), child: Text("DE")),
+                  DropdownMenuItem(value: Locale('fr'), child: Text("FR")),
+                ].map((item) {
+                  final isSelected = context.locale == item.value;
+                  return DropdownMenuItem<Locale>(
+                    value: item.value,
+                    child: Text(
+                      (item.child as Text).data!,
+                      style: TextStyle(
+                        color:
+                            isSelected
+                                ? Colors.blue
+                                : Theme.of(context).textTheme.bodyLarge?.color,
+                        fontWeight:
+                            isSelected ? FontWeight.bold : FontWeight.normal,
+                      ),
+                    ),
+                  );
+                }).toList(),
           ),
           if (_isLoggedIn)
             IconButton(
@@ -136,7 +152,6 @@ class _HomeScreenState extends State<HomeScreen>
           ),
           // Main content
           Center(
-            // Ensures the content is vertically and horizontally centered
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(
                 horizontal: 24.0,
@@ -149,23 +164,17 @@ class _HomeScreenState extends State<HomeScreen>
                   // Glassmorphism card
                   Container(
                     decoration: BoxDecoration(
-                      color: Colors.white.withAlpha(
-                        (255 * 0.35).toInt(),
-                      ), // Updated opacity
+                      color: Colors.white.withAlpha((255 * 0.35).toInt()),
                       borderRadius: BorderRadius.circular(24),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withAlpha(
-                            (255 * 0.12).toInt(),
-                          ), // Updated opacity
+                          color: Colors.black.withAlpha((255 * 0.12).toInt()),
                           blurRadius: 24,
                           offset: Offset(0, 8),
                         ),
                       ],
                       border: Border.all(
-                        color: Colors.white.withAlpha(
-                          (255 * 0.5).toInt(),
-                        ), // Updated opacity
+                        color: Colors.white.withAlpha((255 * 0.5).toInt()),
                         width: 1.5,
                       ),
                     ),
@@ -175,7 +184,9 @@ class _HomeScreenState extends State<HomeScreen>
                         children: [
                           Text(
                             'start_scanning'.tr(),
-                            style: textTheme.headlineSmall?.copyWith(
+                            style: Theme.of(
+                              context,
+                            ).textTheme.headlineSmall?.copyWith(
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
                               fontSize: 24,
@@ -194,7 +205,9 @@ class _HomeScreenState extends State<HomeScreen>
                           const SizedBox(height: 18),
                           Text(
                             'description'.tr(),
-                            style: textTheme.bodyLarge?.copyWith(
+                            style: Theme.of(
+                              context,
+                            ).textTheme.bodyLarge?.copyWith(
                               color: Colors.white,
                               fontSize: 16,
                               shadows: [
@@ -250,9 +263,7 @@ class _HomeScreenState extends State<HomeScreen>
                                   4,
                                   75,
                                   156,
-                                ).withAlpha(
-                                  (255 * 0.4).toInt(),
-                                ), // Updated opacity
+                                ).withAlpha((255 * 0.4).toInt()),
                                 blurRadius: 18,
                                 offset: Offset(0, 8),
                               ),
@@ -292,7 +303,7 @@ class _HomeScreenState extends State<HomeScreen>
                               foregroundColor: Colors.white,
                               shadowColor: Colors.black.withAlpha(
                                 (255 * 0.25).toInt(),
-                              ), // Updated opacity
+                              ),
                               elevation: 2,
                               padding: const EdgeInsets.symmetric(vertical: 18),
                               textStyle: const TextStyle(
@@ -310,7 +321,7 @@ class _HomeScreenState extends State<HomeScreen>
                                     (255 * 0.7).toInt(),
                                   ),
                                   width: 1.2,
-                                ), // Updated opacity
+                                ),
                               ),
                             ),
                             onPressed: () {
@@ -338,7 +349,7 @@ class _HomeScreenState extends State<HomeScreen>
                               foregroundColor: Colors.white,
                               shadowColor: Colors.black.withAlpha(
                                 (255 * 0.25).toInt(),
-                              ), // Updated opacity
+                              ),
                               elevation: 2,
                               padding: const EdgeInsets.symmetric(vertical: 18),
                               textStyle: const TextStyle(
@@ -356,7 +367,7 @@ class _HomeScreenState extends State<HomeScreen>
                                     (255 * 0.7).toInt(),
                                   ),
                                   width: 1.2,
-                                ), // Updated opacity
+                                ),
                               ),
                             ),
                             onPressed: () {

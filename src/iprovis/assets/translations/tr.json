@@ -51,5 +51,11 @@
   "enter_name": "Lütfen adınızı girin",
   "enter_surname": "Lütfen soyadınızı girin",
   "enter_birth_date": "Lütfen doğum tarihinizi girin",
-  "enter_phone_number": "Lütfen telefon numaranızı girin"
+  "enter_phone_number": "Lütfen telefon numaranızı girin",
+  "login_required_to_save": "Bu ürünü kaydetmek için giriş yapmanız gerekiyor.",
+  "product_saved": "Ürün başarıyla kaydedildi.",
+  "save": "Kaydet",
+  "login_required_to_use_map": "Lütfen harita özelliğini kullanmak için giriş yapınız.",
+  "invalid_phone_number": "Telefon numarası yalnızca rakamlardan oluşmalıdır.",
+  "phone_number_length": "Telefon numarası 10 ile 15 karakter arasında olmalıdır."
 }

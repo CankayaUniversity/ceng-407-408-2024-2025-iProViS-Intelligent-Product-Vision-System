@@ -270,7 +270,13 @@ class RegisterScreenState extends State<RegisterScreen> {
                       ), // Added input text color
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'enter_phone_number'.tr();
+                          return 'enter_phone_number'.tr(); // null check
+                        }
+                        if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                          return 'invalid_phone_number'.tr(); //check
+                        }
+                        if (value.length < 10 || value.length > 15) {
+                          return 'phone_number_length'.tr(); // length check
                         }
                         return null;
                       },
