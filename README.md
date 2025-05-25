@@ -10,15 +10,15 @@ iProViS: Intelligent Product Vision System
 <table border="1">
     <thead>
         <tr>
-            <th>Advisor </th>
+            <th>Advisors </th>
         </tr>
     </thead>
     <tbody>
         <tr>
-            <td>Gül Tokdemir</td>
+            <td>Assoc. Prof. Dr. Gül TOKDEMİR</td>
         </tr>
         <tr>
-            <td>Sezer Uğuz</td>
+            <td>Res. Asst. Sezer UĞUZ</td>
         </tr>
     </tbody>
 </table>
